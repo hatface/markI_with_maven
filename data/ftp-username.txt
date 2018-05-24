@@ -1,0 +1,7 @@
+admin
+manager
+root
+sysdiag
+nobody
+ftp
+anonymous
