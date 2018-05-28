@@ -102,7 +102,7 @@ public class FtpBrute implements IPocBase {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		Map infodict = new HashMap<String, String>();
-		infodict.put("ip", "www.hnxjln.com");
+		infodict.put("ip", "74.207.251.51");
 		infodict.put("port", "21");
 		infodict.put("service_type", "ftp");
 		infodict.put("service_version", "ftp");

@@ -47,7 +47,7 @@ public class MysqlBrute implements IPocBase {
 		String serviceVersion = (String) infodict.get("service_version");
 		boolean success = false;
 		try {
-			Class.forName("com.mysql.jdbc.Driver").newInstance();
+			Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
 			String url = "jdbc:mysql://"+ip+":"+port+"/mysql";  
 		    
 		    
@@ -106,8 +106,8 @@ public class MysqlBrute implements IPocBase {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		Map infodict = new HashMap<String, String>();
-		infodict.put("ip", "www.hnxjln.com");
-		infodict.put("port", "3306");
+		infodict.put("ip", "74.207.251.51");
+		infodict.put("port", "3307");
 		infodict.put("service_type", "mysql");
 		infodict.put("service_version", "mysql");
 		System.out.println(new MysqlBrute().verify(infodict));

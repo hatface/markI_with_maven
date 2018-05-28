@@ -106,8 +106,8 @@ public class PhpInfoLeak implements IPocBase {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		Map infodict = new HashMap<String, String>();
-		infodict.put("ip", "www.talkceltic.net");
-		infodict.put("port", "80");
+		infodict.put("ip", "74.207.251.51");
+		infodict.put("port", "8083");
 		infodict.put("service_type", "http");
 		infodict.put("service_version", "topsec");
 		System.out.println(new PhpInfoLeak().verify(infodict));
