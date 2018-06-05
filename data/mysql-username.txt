@@ -1,1 +1,5 @@
+pm_narigroup_com
 root
+root1
+mysqld
+server
