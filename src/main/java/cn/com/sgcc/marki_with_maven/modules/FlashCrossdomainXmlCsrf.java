@@ -17,7 +17,7 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
-import cn.com.sgcc.marki_with_maven.misc.Tools;
+import cn.com.sgcc.marki_with_maven.misc.NetWorkTools;
 
 public class FlashCrossdomainXmlCsrf implements IPocBase {
 
@@ -56,7 +56,7 @@ public class FlashCrossdomainXmlCsrf implements IPocBase {
 		try {
 			String url = String.format("%s://%s:%s/", serviceType.contains("https") ? "https":"http", ip, port );
 			HttpGet httpGet = new HttpGet(url);
-			customClient = new Tools().getCustomClient();
+			customClient = new NetWorkTools().getCustomClient();
 			CloseableHttpResponse resp = customClient.execute(httpGet);
 			if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
 			{

@@ -20,7 +20,7 @@ import org.apache.http.util.EntityUtils;
 
 import com.alibaba.fastjson.JSON;
 
-import cn.com.sgcc.marki_with_maven.misc.Tools;
+import cn.com.sgcc.marki_with_maven.misc.NetWorkTools;
 
 public class EzUpload_2_2_index_php_path_Parameter_RFI implements IPocBase {
 
@@ -44,7 +44,7 @@ public class EzUpload_2_2_index_php_path_Parameter_RFI implements IPocBase {
 		try {
 			String url = String.format("%s://%s:%s/ezupload/index.php", serviceType.contains("https") ? "https":"http", ip, port );
 			HttpGet httpGet = new HttpGet(url);
-			customClient = new Tools().getCustomClient();
+			customClient = new NetWorkTools().getCustomClient();
 			HttpContext httpContext = new BasicHttpContext();
 			CloseableHttpResponse resp = customClient.execute(httpGet, httpContext);
 			HttpHost targetHost = (HttpHost)httpContext.getAttribute(ExecutionContext.HTTP_TARGET_HOST);

@@ -15,7 +15,7 @@ import org.apache.http.util.EntityUtils;
 
 import com.alibaba.fastjson.JSON;
 
-import cn.com.sgcc.marki_with_maven.misc.Tools;
+import cn.com.sgcc.marki_with_maven.misc.NetWorkTools;
 
 public class DockApiUnauthorization implements IPocBase {
 
@@ -54,7 +54,7 @@ public class DockApiUnauthorization implements IPocBase {
 		try {
 			String url = String.format("%s://%s:%s/info", serviceType.contains("https") ? "https":"http", ip, port );
 			HttpGet httpGet = new HttpGet(url);
-			customClient = new Tools().getCustomClient();
+			customClient = new NetWorkTools().getCustomClient();
 			CloseableHttpResponse resp = customClient.execute(httpGet);
 			String string = EntityUtils.toString(resp.getEntity());
 			httpGet.releaseConnection();

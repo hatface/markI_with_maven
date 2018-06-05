@@ -14,7 +14,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 
-import cn.com.sgcc.marki_with_maven.misc.Tools;
+import cn.com.sgcc.marki_with_maven.misc.NetWorkTools;
 
 public class CVE_2017_7529NginxIntegerOverflow implements IPocBase {
 
@@ -53,7 +53,7 @@ public class CVE_2017_7529NginxIntegerOverflow implements IPocBase {
 		try {
 			String url = String.format("%s://%s:%s/", serviceType.contains("https") ? "https":"http", ip, port );
 			HttpGet httpGet = new HttpGet(url);
-			customClient = new Tools().getCustomClient();
+			customClient = new NetWorkTools().getCustomClient();
 			CloseableHttpResponse resp = customClient.execute(httpGet);
 			Header firstHeader = resp.getFirstHeader("Content-Length");
 			int contentLength = Integer.valueOf(firstHeader.getValue());

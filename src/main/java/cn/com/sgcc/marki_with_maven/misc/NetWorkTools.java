@@ -22,7 +22,7 @@ import org.apache.http.impl.client.LaxRedirectStrategy;
 import org.apache.http.impl.conn.DefaultProxyRoutePlanner;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 
-public class Tools {
+public class NetWorkTools {
     public  SSLContext createIgnoreVerifySSL() throws NoSuchAlgorithmException, KeyManagementException {  
         SSLContext sc = SSLContext.getInstance("SSLv3");  
       

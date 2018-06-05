@@ -13,11 +13,14 @@ import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 
 public class CVE_2015_4852_JAVAUnserialization implements IPocBase {
+	
+	
 
 	public Map info() {
 		// TODO Auto-generated method stub
 		Map info = new HashMap<String, String>();
 		info.put("name", "CVE_2015_4852_JAVAUnserialization");
+		info.put("category", "");
 		return info;
 	}
 

