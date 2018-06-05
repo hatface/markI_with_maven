@@ -116,11 +116,7 @@ public class SSHBrute implements IPocBase {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		Map infodict = new HashMap<String, String>();
-<<<<<<< HEAD
-		infodict.put("ip", "123.56.12.86");
-=======
 		infodict.put("ip", "74.207.251.51");
->>>>>>> 3b9ad9c01f61edb7666b7be2584aa4e9c4cdf0d3
 		infodict.put("port", "22");
 		infodict.put("service_type", "ssh");
 		infodict.put("service_version", "ssh");
