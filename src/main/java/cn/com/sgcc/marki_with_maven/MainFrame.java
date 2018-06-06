@@ -27,6 +27,8 @@ public class MainFrame implements ActionListener{
 	public JTextField textTarget = null;
 	private Scheduler myscheduler = null;
 	
+	
+	
 	private void init()
 	{
 		ClassLoader classLoader = new ClassLoader();
