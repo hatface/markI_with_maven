@@ -18,7 +18,7 @@ public class JavaTest {
             connectionSource = new JdbcConnectionSource(connectionString);  
             Dao<Poc, ?> createDao = DaoManager.createDao(connectionSource, Poc.class);
             
-            TableUtils.createTable(connectionSource, Poc.class);
+            
         }
         catch(Exception e)
         {

@@ -20,7 +20,7 @@ public class CVE_2015_4852_JAVAUnserialization implements IPocBase {
 		// TODO Auto-generated method stub
 		Map info = new HashMap<String, String>();
 		info.put("name", "CVE_2015_4852_JAVAUnserialization");
-		info.put("category", "");
+		
 		return info;
 	}
 

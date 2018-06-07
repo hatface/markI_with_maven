@@ -31,7 +31,7 @@ public class UFNCInjection2 implements IPocBase {
 		// TODO Auto-generated method stub
 		Map info = new HashMap<String, Object>();
 		info.put("name", "Ufnc SQL Injection2");
-		info.put("location", "epp/LoginServerDo.jsp?userid=1*&pwd=1");
+//		info.put("location", "epp/LoginServerDo.jsp?userid=1*&pwd=1");
 		return info;
 	}
 
