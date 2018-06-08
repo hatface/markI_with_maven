@@ -125,8 +125,8 @@ public class MainFrame implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		this.myscheduler = new Scheduler(this);
-		this.myscheduler.start();
+//		this.myscheduler = new Scheduler(this);
+//		this.myscheduler.start();
 	}
 
 }

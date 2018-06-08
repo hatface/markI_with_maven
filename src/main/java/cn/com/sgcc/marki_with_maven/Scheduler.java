@@ -1,12 +1,20 @@
 package cn.com.sgcc.marki_with_maven;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Semaphore;
+
+import cn.com.sgcc.marki_with_maven.bean.Poc;
+import cn.com.sgcc.marki_with_maven.bean.Task;
+import cn.com.sgcc.marki_with_maven.db.ClassLoader;
+import cn.com.sgcc.marki_with_maven.modules.IPocBase;
+import cn.com.sgcc.marki_with_maven.ui.MainFrame;
 
 public class Scheduler extends Thread {
 
@@ -95,9 +103,47 @@ public class Scheduler extends Thread {
 	
 	public void consumer(Map infodict)
 	{
-		Thread t = new Consumer(infodict, this);
-		consumers.add(t);
-		t.start();
+		for(Poc poc : ClassLoader.getSINGLETON().getPocs().values())
+		{
+			Map pocinfo = poc.getAction().info();
+			
+			
+			String ip = (String) infodict.get("ip");
+			for(String[] service : (ArrayList<String[]>)infodict.get("services"))
+			{
+				String port = service[0];
+				String service_type = service[2];
+				String service_version = null;
+				try
+				{
+				service_version = service[3];
+				}
+				catch(Exception e)
+				{
+					service_version = null;
+				}
+				Map localpass = new HashMap<Object, Object>();
+				localpass.putAll(pocinfo);
+				localpass.put("success", false);
+				localpass.put("ip", ip);
+				localpass.put("port", port);
+				localpass.put("service_type", service_type);
+				localpass.put("service_version", service_version);
+				if (poc.action.match(localpass) )
+				{
+					poc.getMytasks().add(new Task(poc, localpass));
+				}
+			}
+		}
+		
+		
+		
+			
+		
+		
+//		Thread t = new Consumer(infodict, this);
+//		consumers.add(t);
+//		t.start();
 	}
 	
 	synchronized public void consumerReport(Map infodict)
@@ -118,7 +164,14 @@ public class Scheduler extends Thread {
 	synchronized public void producerStart(String ip)
 	{
 		ip = "#start scan "+ip+"\n";
-		this.frame.areaServiceResult.setText(this.frame.areaServiceResult.getText() + ip);
+		try {
+			Config.getSINGLETON().getServiceOS().write(ip.getBytes());
+			this.frame.areaServiceResult.setText(Config.getSINGLETON().getServiceOS().toString());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+//		this.frame.areaServiceResult.setText(this.frame.areaServiceResult.getText() + ip);
 	}
 	
 	
@@ -131,7 +184,14 @@ public class Scheduler extends Thread {
 			String service_type = service[2];
 			String service_version = service[3];
 			String outText = ip + "\t" + port + "\t" + service_type + "\t" + service_version  + "\n";
-			this.frame.areaServiceResult.setText(this.frame.areaServiceResult.getText() + outText);
+//			this.frame.areaServiceResult.setText(this.frame.areaServiceResult.getText() + outText);
+			try {
+				Config.getSINGLETON().getServiceOS().write(outText.getBytes());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			this.frame.areaServiceResult.setText(Config.getSINGLETON().getServiceOS().toString());
 		}
 	}
 	

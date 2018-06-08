@@ -9,7 +9,7 @@ import com.j256.ormlite.table.DatabaseTable;
 import cn.com.sgcc.marki_with_maven.modules.IPocBase;
 
 @DatabaseTable(tableName="POC")
-public class Poc {
+public class Poc implements Comparable<Poc> {
 	
 	
 	
@@ -104,7 +104,21 @@ public class Poc {
 		this.fix = fix;
 	}
 	
-	private List<Task> mytasks = new ArrayList<Task>();	
+	private List<Task> mytasks = new ArrayList<Task>();
+
+	public List<Task> getMytasks() {
+		return mytasks;
+	}
+
+	public void setMytasks(List<Task> mytasks) {
+		this.mytasks = mytasks;
+	}
+
+	@Override
+	public int compareTo(Poc o) {
+		// TODO Auto-generated method stub
+		return location.compareTo(o.location);
+	}	
 	
 	
 	

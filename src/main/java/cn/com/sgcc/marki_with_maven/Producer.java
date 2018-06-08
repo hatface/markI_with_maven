@@ -42,7 +42,8 @@ public class Producer extends Thread {
             BufferedReader br = new BufferedReader (isr);
             OutputStreamWriter osw = new OutputStreamWriter (process.getOutputStream ());
             BufferedWriter bw = new BufferedWriter (osw);
-            bw.write ("nmap -sV --version-all -p1-65535 --open -n --host-timeout=3600s -T4 " + ip);
+//            bw.write ("nmap -sV --version-all -p1-65535 --open -n --host-timeout=3600s -T4 " + ip);
+            bw.write ("nmap -n  --open -p80 " + ip);
             bw.newLine ();
             bw.flush ();
             bw.close ();

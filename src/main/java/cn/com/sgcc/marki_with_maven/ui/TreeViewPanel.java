@@ -1,6 +1,10 @@
 package cn.com.sgcc.marki_with_maven.ui;
 
 import java.awt.Component;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -14,6 +18,7 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
+import com.mysql.cj.x.protobuf.MysqlxDatatypes.Array;
 
 import cn.com.sgcc.marki_with_maven.bean.Poc;
 import cn.com.sgcc.marki_with_maven.db.ClassLoader;
@@ -88,13 +93,16 @@ public class TreeViewPanel extends JPanel {
 		this.mainFrame = amainFrame;
 		
 		
-		ConnectionSource connectionSource = null;
-		Dao<Poc, Integer> pocDao = null;
+
 		try {
-			String connectionString = "jdbc:sqlite:db/data.db";
-			connectionSource = new JdbcConnectionSource(connectionString);
-			pocDao = DaoManager.createDao(connectionSource, Poc.class);
-			List<Poc> queryForAll = pocDao.queryBuilder().orderBy("location", true).query();
+			
+			Collection<Poc> queryForAll0 = (ClassLoader.getSINGLETON().getPocs().values());
+			List<Poc > queryForAll = new ArrayList<>();
+			for(Poc poc : queryForAll0)
+			{
+				queryForAll.add(poc);
+			}
+			Collections.sort(queryForAll);
 			for(Poc poc : queryForAll)
 			{
 

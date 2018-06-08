@@ -24,12 +24,12 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import org.sqlite.core.DB;
-
+import cn.com.sgcc.marki_with_maven.Config;
+import cn.com.sgcc.marki_with_maven.Scheduler;
 import cn.com.sgcc.marki_with_maven.bean.Poc;
+import cn.com.sgcc.marki_with_maven.bean.Task;
 import cn.com.sgcc.marki_with_maven.db.ClassLoader;
 import cn.com.sgcc.marki_with_maven.db.DBHelper;
-import javafx.scene.control.TextField;
 
 public class MainFrame extends JFrame {
 	
@@ -54,7 +54,9 @@ public class MainFrame extends JFrame {
 	public JTextArea areaServiceResult = null;
 	public JTextField textTarget = null;
 	
-	
+
+
+
 	public void init()
 	{
 		setSize(800, 600);
@@ -88,6 +90,17 @@ public class MainFrame extends JFrame {
 		setVisible(true);
 		
 	}
+	private Scheduler myscheduler = null;
+	
+	
+	class buttonStartActionListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			myscheduler = new Scheduler(MainFrame.this);
+			myscheduler.start();
+		}}
 	
 	
 	public void showDashBoard()
@@ -107,11 +120,11 @@ public class MainFrame extends JFrame {
 		textTarget = new JTextField("                                 ");
 		textTarget.setToolTipText("input target as 10.0.0.1/24");
 		JButton buttonStart = new JButton("start");
-//		buttonStart.addActionListener(this);
+		buttonStart.addActionListener(new buttonStartActionListener());
 		areaServiceResult = new JTextArea();
 		JTabbedPane wrapAreaServiceResult = new JTabbedPane();
 		wrapAreaServiceResult.add("service", new JScrollPane(areaServiceResult));
-		areaServiceResult.setText("            \n");
+		areaServiceResult.setText(Config.getSINGLETON().getServiceOS().toString());
 		operationPanel.add(lableTarget);
 		operationPanel.add(textTarget);
 		operationPanel.add(buttonStart);
@@ -119,6 +132,7 @@ public class MainFrame extends JFrame {
 		rightUpPane.add(wrapAreaServiceResult, BorderLayout.CENTER);
 
 		
+		rightDownPanePanelTextArea.setText(Config.getSINGLETON().getConsoleOS().toString());
 		
 		wholePanel.setOneTouchExpandable(true);
 		wholePanel.setContinuousLayout(true);
@@ -183,6 +197,14 @@ public class MainFrame extends JFrame {
 		JTabbedPane rightDownContent = new JTabbedPane();
 		JScrollPane rightDownContentText = new JScrollPane();
 		rightDownContent.add("console for " + poc.getName(), rightDownContentText);
+		int i = 1;
+		for(Task t : poc.getMytasks())
+		{
+			JTextArea jTextArea = new JTextArea();
+			jTextArea.setText(t.getOut().toString());
+			rightDownContent.add("console for task"+ i, new JScrollPane(jTextArea));
+			i ++;
+		}
 		rightDownPane.add(rightDownContent);
 		
 		rightUpPane.setLayout( new BorderLayout() );
@@ -257,5 +279,7 @@ public class MainFrame extends JFrame {
 		mainFrame.init();
 		mainFrame.setVisible(true);
 	}
+	
+	
 
 }
