@@ -1,6 +1,7 @@
 package cn.com.sgcc.marki_with_maven.modules;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -73,7 +74,9 @@ public class MysqlBrute implements IPocBase {
 					break;
 				for (String passWord : passWords)
 				{
-					System.out.println(String.format("Testing Mysql %s,%s", userName, passWord));
+					if(infodict.get("outputStream") != null)
+						((ByteArrayOutputStream)infodict.get("outputStream")).write( 
+								(String.format("Testing Mysql %s,%s", userName, passWord)).getBytes());
 					try
 					{
 						Connection conn = DriverManager.getConnection(url, userName, passWord);

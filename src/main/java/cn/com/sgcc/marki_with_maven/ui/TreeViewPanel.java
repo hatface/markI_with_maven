@@ -16,10 +16,18 @@ import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 
 import cn.com.sgcc.marki_with_maven.bean.Poc;
+import cn.com.sgcc.marki_with_maven.db.ClassLoader;
 
 public class TreeViewPanel extends JPanel {
 	
 	
+	public TreeViewPanel() {
+		super();
+		
+	}
+
+
+
 	private DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("the POCS");
 	private HashMap<String, DefaultMutableTreeNode> categorys = new HashMap<>();
 	
@@ -30,20 +38,34 @@ public class TreeViewPanel extends JPanel {
 	
 	private class TreeLeef extends DefaultMutableTreeNode 
 	{
-		String pocpath;
+		Poc pocpath;
 
-		public String getPocpath() {
+		
+
+		
+
+		public Poc getPocpath() {
 			return pocpath;
 		}
 
-		public void setPocpath(String pocpath) {
+
+
+
+
+		public void setPocpath(Poc pocpath) {
 			this.pocpath = pocpath;
 		}
 
-		public TreeLeef(Object userObject) {
-			super(userObject);
+
+
+
+
+		public TreeLeef(Poc userObject) {
+
+			
+			super(userObject.getName() == null? userObject.getLocation(): userObject.getName());
 			// TODO Auto-generated constructor stub
-			this.pocpath = (String) userObject;
+			this.pocpath = userObject;
 		}
 		
 	}
@@ -61,8 +83,10 @@ public class TreeViewPanel extends JPanel {
 	
 	
 	
-	public TreeViewPanel() {
+	public TreeViewPanel(MainFrame amainFrame) {
 		super();
+		this.mainFrame = amainFrame;
+		
 		
 		ConnectionSource connectionSource = null;
 		Dao<Poc, Integer> pocDao = null;
@@ -87,15 +111,11 @@ public class TreeViewPanel extends JPanel {
 			}
 			for(Poc poc : queryForAll)
 			{
-				String name = poc.getName();
-				if (name == null)
-				{
-					name = poc.getLocation();
-				}
+				
 				String category = poc.getCategory() + "";
 				if(categorys.get(category) != null)
 				{
-					categorys.get(category).add(new TreeLeef(name));
+					categorys.get(category).add(new TreeLeef(poc));
 				}
 			}
 		}
@@ -115,11 +135,12 @@ public class TreeViewPanel extends JPanel {
 				DefaultMutableTreeNode node = (DefaultMutableTreeNode)theTree.getLastSelectedPathComponent();
 				if(node == rootNode)
 				{
-					
+					mainFrame.showDashBoard();
 				}
 				else if(node instanceof TreeLeef)
 				{
-					String pocpath = ((TreeLeef)node).getPocpath();
+					Poc poc = ((TreeLeef)node).getPocpath();
+					mainFrame.showPocDetail(poc);
 				}
 				else if (node instanceof TreeBrunch)
 				{

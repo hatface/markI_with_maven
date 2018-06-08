@@ -1,5 +1,8 @@
 package cn.com.sgcc.marki_with_maven.bean;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -17,6 +20,38 @@ public class Poc {
 	@DatabaseField(generatedId = true)
 	private Integer id;
 	
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public IPocBase getAction() {
+		return action;
+	}
+
+	public void setAction(IPocBase action) {
+		this.action = action;
+	}
+
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
+	public String getFix() {
+		return fix;
+	}
+
+	public void setFix(String fix) {
+		this.fix = fix;
+	}
+
 	@DatabaseField(canBeNull=true)
 	private String name;
 	
@@ -68,6 +103,10 @@ public class Poc {
 		this.author = author;
 		this.fix = fix;
 	}
+	
+	private List<Task> mytasks = new ArrayList<Task>();	
+	
+	
 	
 	
 	
