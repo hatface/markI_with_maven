@@ -15,7 +15,6 @@ public class MemcachedUnauthorization implements IPocBase {
 		// TODO Auto-generated method stub
 		return new HashMap<String, String>(){{
 			put("author", "kongzhen");
-			put("vuln_name", "MemcachedUnauthorization");
 			}};
 	}
 

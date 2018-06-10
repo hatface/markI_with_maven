@@ -16,52 +16,52 @@
 
 	<build>
 		<plugins>
-		        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <configuration>
-              <source>1.7</source>
-              <target>1.7</target>
-            </configuration>
-      </plugin>
-			<plugin>  
-                <groupId>org.apache.maven.plugins</groupId>  
-                <artifactId>maven-jar-plugin</artifactId>  
-                <configuration>  
-                  <excludes>  
-                    <exclude>**/log4j.properties</exclude>  
-                  </excludes>  
-                  <archive>  
-                    <manifest>  
-                    <addClasspath>true</addClasspath>  
-                    <mainClass>cn.com.sgcc.marki_with_maven.MainFrame</mainClass>  
-                    <classpathPrefix>lib/</classpathPrefix>  
-                    </manifest>  
-                  </archive>  <!-- maximize compatibility -->
-					
-                </configuration>  
-            </plugin>  
-  
-            <!-- Copy project dependency -->  
-            <plugin>  
-                <groupId>org.apache.maven.plugins</groupId>  
-                <artifactId>maven-dependency-plugin</artifactId>  
-                <version>2.5.1</version>  
-                <executions>  
-                  <execution>  
-                    <id>copy-dependencies</id>  
-                    <phase>package</phase>  
-                    <goals>  
-                        <goal>copy-dependencies</goal>  
-                    </goals>  
-                    <configuration>  
-                      <!-- exclude junit, we need runtime dependency only -->  
-                      <includeScope>runtime</includeScope>  
-                      <outputDirectory>${project.build.directory}/lib/</outputDirectory>  
-                    </configuration>  
-                  </execution>  
-                </executions>  
-            </plugin>              
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>**/log4j.properties</exclude>
+					</excludes>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<mainClass>cn.com.sgcc.marki_with_maven.MainFrame</mainClass>
+							<classpathPrefix>lib/</classpathPrefix>
+						</manifest>
+					</archive>  <!-- maximize compatibility -->
+
+				</configuration>
+			</plugin>
+
+			<!-- Copy project dependency -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.5.1</version>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<!-- exclude junit, we need runtime dependency only -->
+							<includeScope>runtime</includeScope>
+							<outputDirectory>${project.build.directory}/lib/</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -142,31 +142,38 @@
 			<version>0.1.54</version>
 		</dependency>
 
+<!--
 		<dependency>
 			<groupId>javaUnserializationWeblogic</groupId>
 			<artifactId>javaUnserializationWeblogic</artifactId>
 			<version>1.0.0</version>
-			
+		</dependency>-->
+
+		<dependency>
+			<groupId>WebLogic_EXP</groupId>
+			<artifactId>WebLogic_EXP</artifactId>
+			<version>1.0.0</version>
 		</dependency>
-		
+
+
 		<!-- https://mvnrepository.com/artifact/com.j256.ormlite/ormlite-core -->
-<dependency>
-    <groupId>com.j256.ormlite</groupId>
-    <artifactId>ormlite-core</artifactId>
-    <version>5.1</version>
-</dependency>
-		
+		<dependency>
+			<groupId>com.j256.ormlite</groupId>
+			<artifactId>ormlite-core</artifactId>
+			<version>5.1</version>
+		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/com.j256.ormlite/ormlite-jdbc -->
-<dependency>
-    <groupId>com.j256.ormlite</groupId>
-    <artifactId>ormlite-jdbc</artifactId>
-    <version>5.1</version>
-</dependency>
+		<dependency>
+			<groupId>com.j256.ormlite</groupId>
+			<artifactId>ormlite-jdbc</artifactId>
+			<version>5.1</version>
+		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc -->
-<dependency>
-    <groupId>org.xerial</groupId>
-    <artifactId>sqlite-jdbc</artifactId>
-    <version>3.23.1</version>
-</dependency>
+		<dependency>
+			<groupId>org.xerial</groupId>
+			<artifactId>sqlite-jdbc</artifactId>
+			<version>3.23.1</version>
+		</dependency>
 	</dependencies>
 </project>

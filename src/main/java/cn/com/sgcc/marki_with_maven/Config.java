@@ -38,5 +38,9 @@ public class Config {
 	}
 	
 	public static final String CONFIGURABLE_PARA = "configurable_para";
+	
+	public static final String CONFIGURABLE_PARA_SPECIAL = "configurable_para_special";
+	
+	public static final String CONFIGED = "config_";
 
 }

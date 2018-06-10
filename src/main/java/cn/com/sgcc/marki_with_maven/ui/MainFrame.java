@@ -176,6 +176,23 @@ public class MainFrame extends JFrame {
 		}
 
 	}
+	
+	class LaunchConfigPocButtonAction implements ActionListener{
+
+		Poc poc;
+
+		public LaunchConfigPocButtonAction(Poc poc) {
+			super();
+			this.poc = poc;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			new PocConfigFrame(MainFrame.this, poc);
+		}
+		
+	}
 
 	public void showPocDetail(Poc poc) {
 		JTabbedPane rightDownPane = new JTabbedPane();
@@ -233,6 +250,7 @@ public class MainFrame extends JFrame {
 		JButton fixInformationButton = new JButton("save");
 		fixInformationButton.addActionListener(new SaveInformationButtonAction(poc));
 		JButton configButton = new JButton("config");
+		configButton.addActionListener(new LaunchConfigPocButtonAction(poc));
 
 		JPanel tmp2Panel = new JPanel();
 		tmp2Panel.add(fixLabel);
