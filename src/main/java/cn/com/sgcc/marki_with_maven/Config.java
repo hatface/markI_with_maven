@@ -37,6 +37,6 @@ public class Config {
 		this.consoleOS = consoleOS;
 	}
 	
-	
+	public static final String CONFIGURABLE_PARA = "configurable_para";
 
 }

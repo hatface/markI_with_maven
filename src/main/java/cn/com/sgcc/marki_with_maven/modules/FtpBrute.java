@@ -1,6 +1,7 @@
 package cn.com.sgcc.marki_with_maven.modules;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -18,6 +19,13 @@ public class FtpBrute implements IPocBase {
 		// TODO Auto-generated method stub
 		Map info = new HashMap<String, Object>();
 		info.put("name", "FtpBrute");
+		HashMap<String, Object> configurable_para = new HashMap<String, Object>()
+				{{
+					put("user_names", new File("data/ftp-username.txt"));
+					put("passwords", new File("data/ftp-password.txt"));
+				}};
+//		configurable_para.putAll(IPocBase.Utils.configurable_para);
+		info.put("configurable_para", configurable_para);
 		return info;
 	}
 
@@ -36,19 +44,21 @@ public class FtpBrute implements IPocBase {
 		return ismatch;
 	}
 
+	
+	
 	@Override
 	public boolean verify(Map infodict) {
 		// TODO Auto-generated method stub
-		String ip = (String) infodict.get("ip");
-		String port = (String) infodict.get("port");
-		String serviceType = (String) infodict.get("service_type");
-		String serviceVersion = (String) infodict.get("service_version");
+		String ip = (String) IPocBase.Utils.getParameter(infodict, "ip");
+		String port = (String) IPocBase.Utils.getParameter(infodict, "port");
+		String serviceType = (String) IPocBase.Utils.getParameter(infodict, "service_type") ;
+		String serviceVersion = (String) IPocBase.Utils.getParameter(infodict, "service_version") ;
 		boolean success = false;
 		FTPClient ftpClient = new FTPClient();
 		try {
 			
-			BufferedReader brUserName = new BufferedReader(new InputStreamReader(new FileInputStream(new File("data/ftp-username.txt"))));
-			BufferedReader brPassWord = new BufferedReader(new InputStreamReader(new FileInputStream(new File("data/ftp-password.txt"))));
+			BufferedReader brUserName = new BufferedReader(new InputStreamReader(new FileInputStream(infodict.get("config_user_names")==null? new File("data/ftp-username.txt") :(File)infodict.get("config_user_names") )));
+			BufferedReader brPassWord = new BufferedReader(new InputStreamReader(new FileInputStream(infodict.get("config_passwords") == null ?  new File("data/ftp-password.txt") : (File) infodict.get("config_passwords"))));
 			ArrayList<String> userNames = new ArrayList<String>();
 			ArrayList<String> passWords = new ArrayList<String>();
 			String tmpuserName = "";
@@ -69,7 +79,9 @@ public class FtpBrute implements IPocBase {
 					break;
 				for (String passWord : passWords)
 				{
-					System.out.println(String.format("Testing FTP %s,%s", userName, passWord));
+					if(infodict.get("outputStream") != null)
+						((ByteArrayOutputStream)infodict.get("outputStream")).write( 
+								(String.format("Testing FTP %s,%s", userName, passWord)).getBytes());
 					ftpClient.connect(ip, Integer.valueOf(port));
 					if (ftpClient.login(userName, passWord))
 					{

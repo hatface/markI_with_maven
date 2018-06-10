@@ -1,6 +1,7 @@
 package cn.com.sgcc.marki_with_maven.modules;
 
 import java.lang.reflect.Modifier;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -29,5 +30,18 @@ public interface IPocBase {
             }
             return payloadTypes;
         }
+        
+        public static Object getParameter(Map infodict, String para)
+        {
+        	return infodict.get("config_"+para) == null? infodict.get(para) : infodict.get("config_"+para);
+        }
+        
+        public final static HashMap<String, Object> configurable_para = new HashMap<String, Object>(){{
+        	put("ip", "test");
+        	put("service_type", "test");
+        	put("service_version", "test");
+        	put("port", "test");
+        	
+        }};
     }
 }

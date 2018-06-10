@@ -30,40 +30,33 @@ import cn.com.sgcc.marki_with_maven.bean.Poc;
 import cn.com.sgcc.marki_with_maven.bean.Task;
 import cn.com.sgcc.marki_with_maven.db.ClassLoader;
 import cn.com.sgcc.marki_with_maven.db.DBHelper;
+import javafx.scene.control.TextArea;
 
 public class MainFrame extends JFrame {
-	
-	
+
 	private JSplitPane wholePanel;
 	private JPanel leftPanel;
 	private JSplitPane rightPanel;
-	
-	
+
 	public MainFrame() throws HeadlessException {
 		super();
 	}
 
-	
-	
 	public MainFrame(JPanel leftPanel) throws HeadlessException {
 		super();
 		this.leftPanel = leftPanel;
 	}
 
-	public JTextArea	rightDownPanePanelTextArea = null;
+	public JTextArea rightDownPanePanelTextArea = null;
 	public JTextArea areaServiceResult = null;
 	public JTextField textTarget = null;
-	
 
-
-
-	public void init()
-	{
+	public void init() {
 		setSize(800, 600);
-		setExtendedState(JFrame.MAXIMIZED_BOTH);  
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		//JMenu
+
+		// JMenu
 		JMenuBar menubar = new JMenuBar();
 		JMenu menu1 = new JMenu("File");
 		JMenu menu2 = new JMenu("Edit");
@@ -75,45 +68,42 @@ public class MainFrame extends JFrame {
 		JMenuItem item2 = new JMenuItem("close");
 		menu1.add(item1);
 		menu1.addSeparator();
-		menu1.add(item2);		
+		menu1.add(item2);
 
-		
-		//JSplitPane
-		wholePanel 	= new JSplitPane();
-		leftPanel 	= new TreeViewPanel(this);		
-		
+		// JSplitPane
+		wholePanel = new JSplitPane();
+		leftPanel = new TreeViewPanel(this);
 
 		showDashBoard();
-		
+
 		setJMenuBar(menubar);
 		setContentPane(wholePanel);
 		setVisible(true);
-		
+
 	}
+
 	private Scheduler myscheduler = null;
-	
-	
-	class buttonStartActionListener implements ActionListener{
+
+	class buttonStartActionListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
 			myscheduler = new Scheduler(MainFrame.this);
 			myscheduler.start();
-		}}
-	
-	
-	public void showDashBoard()
-	{
-		rightPanel 	= new JSplitPane();
-		JTabbedPane rightDownPane	= new JTabbedPane();
-		rightDownPanePanelTextArea = new JTextArea();	
-		JScrollPane 		rightDownPanePanel = new JScrollPane(rightDownPanePanelTextArea);	
+		}
+	}
+
+	public void showDashBoard() {
+		rightPanel = new JSplitPane();
+		JTabbedPane rightDownPane = new JTabbedPane();
+		rightDownPanePanelTextArea = new JTextArea();
+		rightDownPanePanelTextArea.setEditable(false);
+		JScrollPane rightDownPanePanel = new JScrollPane(rightDownPanePanelTextArea);
 		rightDownPanePanelTextArea.setText("            \n");
 		rightDownPane.add("console", rightDownPanePanel);
 		leftPanel.setMinimumSize(new Dimension(200, 100));
-		
-		
+
 		JPanel rightUpPane = new JPanel(new BorderLayout());
 		JPanel operationPanel = new JPanel();
 		JLabel lableTarget = new JLabel("target");
@@ -122,6 +112,7 @@ public class MainFrame extends JFrame {
 		JButton buttonStart = new JButton("start");
 		buttonStart.addActionListener(new buttonStartActionListener());
 		areaServiceResult = new JTextArea();
+		areaServiceResult.setEditable(false);
 		JTabbedPane wrapAreaServiceResult = new JTabbedPane();
 		wrapAreaServiceResult.add("service", new JScrollPane(areaServiceResult));
 		areaServiceResult.setText(Config.getSINGLETON().getServiceOS().toString());
@@ -131,9 +122,8 @@ public class MainFrame extends JFrame {
 		rightUpPane.add(operationPanel, BorderLayout.NORTH);
 		rightUpPane.add(wrapAreaServiceResult, BorderLayout.CENTER);
 
-		
 		rightDownPanePanelTextArea.setText(Config.getSINGLETON().getConsoleOS().toString());
-		
+
 		wholePanel.setOneTouchExpandable(true);
 		wholePanel.setContinuousLayout(true);
 		wholePanel.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
@@ -141,8 +131,7 @@ public class MainFrame extends JFrame {
 		wholePanel.setLeftComponent(leftPanel);
 		wholePanel.setDividerLocation(0.25);
 		wholePanel.setDividerSize(3);
-		
-		
+
 		rightPanel.setOneTouchExpandable(true);
 		rightPanel.setContinuousLayout(true);
 		rightPanel.setOrientation(JSplitPane.VERTICAL_SPLIT);
@@ -152,16 +141,15 @@ public class MainFrame extends JFrame {
 		rightPanel.setDividerSize(3);
 		this.repaint();
 	}
-	
+
 	JTextField idTextField = new JTextField();
 	JTextField nameTextField = new JTextField();
 	JTextField categoryField = new JTextField();
 	JTextField locationField = new JTextField();
 	JTextField authorField = new JTextField();
-	JTextArea fixTextArea = new JTextArea(3, 5);
-	
-	class SaveInformationButtonAction implements ActionListener
-	{
+	JTextArea fixTextArea = new JTextArea(10, 50);
+
+	class SaveInformationButtonAction implements ActionListener {
 		Poc poc;
 
 		public SaveInformationButtonAction(Poc poc) {
@@ -186,80 +174,78 @@ public class MainFrame extends JFrame {
 				e1.printStackTrace();
 			}
 		}
-		
+
 	}
-	
-	public void showPocDetail(Poc poc)
-	{
-		JPanel rightDownPane = new JPanel();
-		JPanel rightUpPane = new JPanel();
+
+	public void showPocDetail(Poc poc) {
+		JTabbedPane rightDownPane = new JTabbedPane();
+		JTabbedPane rightUpPane = new JTabbedPane();
+
+//		JTabbedPane rightDownContent = new JTabbedPane();
+		JTextArea rightDownContentText = new JTextArea();
 		
-		JTabbedPane rightDownContent = new JTabbedPane();
-		JScrollPane rightDownContentText = new JScrollPane();
-		rightDownContent.add("console for " + poc.getName(), rightDownContentText);
+		rightDownContentText.setText("                 \n");
+		rightDownPane.add("console for " + poc.getName(), new JScrollPane(rightDownContentText));
 		int i = 1;
-		for(Task t : poc.getMytasks())
-		{
+		for (Task t : poc.getMytasks()) {
 			JTextArea jTextArea = new JTextArea();
 			jTextArea.setText(t.getOut().toString());
-			rightDownContent.add("console for task"+ i, new JScrollPane(jTextArea));
-			i ++;
+			rightDownPane.add("console for task" + i, new JScrollPane(jTextArea));
+			i++;
 		}
-		rightDownPane.add(rightDownContent);
-		
-		rightUpPane.setLayout( new BorderLayout() );
+//		rightDownPane.add(rightDownPane);
+
+		JPanel rightUpPanecontent = new JPanel(new BorderLayout());
 		JLabel idLabel = new JLabel("id");
 		JLabel nameLabel = new JLabel("name");
 		JLabel categoryLabel = new JLabel("category");
 		JLabel locationLabel = new JLabel("location");
 		JLabel authorLabel = new JLabel("author");
-		
+
 		idTextField.setEditable(false);
-		idTextField.setText(poc.getId()+"");
-		
+		idTextField.setText(poc.getId() + "");
+
 		nameTextField.setText(poc.getName());
-		
+
 		categoryField.setText(poc.getCategory());
-		
+
 		locationField.setText(poc.getLocation());
 		locationField.setEditable(false);
-		
+
 		authorField.setText(poc.getAuthor());
-		
+
 		JPanel tmp1Panel = new JPanel(new GridLayout(2, 5));
 		tmp1Panel.add(idLabel);
 		tmp1Panel.add(nameLabel);
 		tmp1Panel.add(categoryLabel);
 		tmp1Panel.add(locationLabel);
 		tmp1Panel.add(authorLabel);
-		
+
 		tmp1Panel.add(idTextField);
 		tmp1Panel.add(nameTextField);
 		tmp1Panel.add(categoryField);
 		tmp1Panel.add(locationField);
 		tmp1Panel.add(authorField);
-		rightUpPane.add(tmp1Panel, BorderLayout.NORTH);
-		
+		rightUpPanecontent.add(tmp1Panel, BorderLayout.NORTH);
+
 		JLabel fixLabel = new JLabel("fix");
-		
-		
+
 		JButton fixInformationButton = new JButton("save");
-		fixInformationButton.addActionListener(new SaveInformationButtonAction(poc) );
+		fixInformationButton.addActionListener(new SaveInformationButtonAction(poc));
 		JButton configButton = new JButton("config");
-		
+
 		JPanel tmp2Panel = new JPanel();
 		tmp2Panel.add(fixLabel);
 		tmp2Panel.add(fixTextArea);
-		
+
 		JPanel tmp3Panel = new JPanel();
 		tmp3Panel.add(fixInformationButton);
 		tmp3Panel.add(configButton);
-		
-		rightUpPane.add(tmp2Panel, BorderLayout.CENTER);
-		rightUpPane.add(tmp3Panel, BorderLayout.EAST);
-		
-		
-		
+
+		rightUpPanecontent.add(tmp2Panel, BorderLayout.CENTER);
+		rightUpPanecontent.add(tmp3Panel, BorderLayout.EAST);
+		rightUpPane.add("detail", rightUpPanecontent);
+
 		rightPanel.setOneTouchExpandable(true);
 		rightPanel.setContinuousLayout(true);
 		rightPanel.setOrientation(JSplitPane.VERTICAL_SPLIT);
@@ -267,19 +253,16 @@ public class MainFrame extends JFrame {
 		rightPanel.setLeftComponent(rightUpPane);
 		rightPanel.setDividerLocation(0.70);
 		rightPanel.setDividerSize(3);
+		this.revalidate();
 		this.repaint();
 	}
 
-
-	public static void main(String[] args) throws ClassNotFoundException, IOException, SQLException
-	{
+	public static void main(String[] args) throws ClassNotFoundException, IOException, SQLException {
 		HashMap<String, Poc> classLoader = ClassLoader.getSINGLETON().loadClasses();
-		
+
 		MainFrame mainFrame = new MainFrame();
 		mainFrame.init();
 		mainFrame.setVisible(true);
 	}
-	
-	
 
 }

@@ -21,7 +21,7 @@ public class Discuz_x3_0_static_image_common_focus_swf_xss implements IPocBase {
 	public Map info() {
 		// TODO Auto-generated method stub
 		Map info = new HashMap<String, Object>();
-		info.put("name", "tomcat_weak_password");
+		info.put("name", "Discuz_x3_0_static_image_common_focus_swf_xss");
 		return info;
 	}
 
