@@ -163,8 +163,10 @@ public class PocConfigFrame extends JFrame {
 			}
 			
 			((Poc)data).getMytasks().add(new Task((Poc)data, passValue, true));
-			JOptionPane.showMessageDialog(parent, String.format("exploit %s successfully", ((Poc)data).getLocation()));
+			((Poc)data).notifyObserver("detail");
 			PocConfigFrame.this.setVisible(false);
+			JOptionPane.showMessageDialog(parent, String.format("exploit %s successfully", ((Poc)data).getLocation()));
+			
 		}
 
 	}

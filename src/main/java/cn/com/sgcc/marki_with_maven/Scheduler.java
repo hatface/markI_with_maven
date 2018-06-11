@@ -132,6 +132,7 @@ public class Scheduler extends Thread {
 				if (poc.action.match(localpass) )
 				{
 					poc.getMytasks().add(new Task(poc, localpass));
+					poc.notifyObserver("detail");
 				}
 			}
 		}

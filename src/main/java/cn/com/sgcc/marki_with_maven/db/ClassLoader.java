@@ -138,7 +138,7 @@ public class ClassLoader {
 		if (connectionSource != null) {
 			connectionSource.close();
 		}
-		return null;
+		return pocs;
 	}
 
 	private HashMap<String, Poc> loadFromDirectory() {

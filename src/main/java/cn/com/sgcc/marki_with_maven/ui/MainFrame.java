@@ -26,13 +26,15 @@ import javax.swing.JTextField;
 
 import cn.com.sgcc.marki_with_maven.Config;
 import cn.com.sgcc.marki_with_maven.Scheduler;
+import cn.com.sgcc.marki_with_maven.bean.Observer;
+import cn.com.sgcc.marki_with_maven.bean.Observerable;
 import cn.com.sgcc.marki_with_maven.bean.Poc;
 import cn.com.sgcc.marki_with_maven.bean.Task;
 import cn.com.sgcc.marki_with_maven.db.ClassLoader;
 import cn.com.sgcc.marki_with_maven.db.DBHelper;
-import javafx.scene.control.TextArea;
+import javafx.beans.InvalidationListener;
 
-public class MainFrame extends JFrame {
+public class MainFrame extends JFrame implements Observer {
 
 	private JSplitPane wholePanel;
 	private JPanel leftPanel;
@@ -60,7 +62,7 @@ public class MainFrame extends JFrame {
 		JMenuBar menubar = new JMenuBar();
 		JMenu menu1 = new JMenu("File");
 		JMenu menu2 = new JMenu("Edit");
-		JMenu menu3 = new JMenu("Source");
+		JMenu menu3 = new JMenu("Plugin");
 		menubar.add(menu1);
 		menubar.add(menu2);
 		menubar.add(menu3);
@@ -69,6 +71,8 @@ public class MainFrame extends JFrame {
 		menu1.add(item1);
 		menu1.addSeparator();
 		menu1.add(item2);
+		
+		JMenuItem pluginCmsAdd = new JMenuItem("cms plugin add");
 
 		// JSplitPane
 		wholePanel = new JSplitPane();
@@ -95,6 +99,7 @@ public class MainFrame extends JFrame {
 	}
 
 	public void showDashBoard() {
+		showStatus = SHOWOVERVIEW;
 		rightPanel = new JSplitPane();
 		JTabbedPane rightDownPane = new JTabbedPane();
 		rightDownPanePanelTextArea = new JTextArea();
@@ -193,8 +198,15 @@ public class MainFrame extends JFrame {
 		}
 		
 	}
+	
+	private int showStatus = 0;
+	private final static int SHOWOVERVIEW = 0;
+	private final static int SHOWDETAIL = 1;
+	private Poc lastPocShowed = null;
 
 	public void showPocDetail(Poc poc) {
+		lastPocShowed = poc;
+		showStatus = SHOWDETAIL;
 		JTabbedPane rightDownPane = new JTabbedPane();
 		JTabbedPane rightUpPane = new JTabbedPane();
 
@@ -274,13 +286,49 @@ public class MainFrame extends JFrame {
 		this.revalidate();
 		this.repaint();
 	}
+	
+	
+	
 
 	public static void main(String[] args) throws ClassNotFoundException, IOException, SQLException {
 		HashMap<String, Poc> classLoader = ClassLoader.getSINGLETON().loadClasses();
-
+		
+		
 		MainFrame mainFrame = new MainFrame();
+		
+		for(Poc poc : classLoader.values())
+		{
+			poc.registerObserver( mainFrame);
+		}
 		mainFrame.init();
 		mainFrame.setVisible(true);
 	}
+
+	@Override
+	public void update(Observerable o, String message) {
+		// TODO Auto-generated method stub
+		if(showStatus == SHOWOVERVIEW && message.contains("detail"))
+		{
+//			show
+			;
+		}
+		else if(showStatus == SHOWOVERVIEW && message.contains("dashboard"))
+		{
+			showDashBoard();
+		}
+		else if(showStatus == SHOWDETAIL && message.contains("detail"))
+		{
+			if(o == lastPocShowed)
+			{
+				showPocDetail((Poc) o);
+			}
+		}
+		else if(showStatus == SHOWDETAIL && message.contains("dashboard"))
+		{
+			;
+		}
+		
+	}
+
 
 }

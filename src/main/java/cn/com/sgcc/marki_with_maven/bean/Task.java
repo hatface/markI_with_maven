@@ -66,6 +66,7 @@ public class Task {
 									.format("successful!!!  ip: %s  port:%s poc:%s extra:%s\n", information.get("ip"),
 											information.get("port"), myPoc.getLocation(), information.get("extra"))
 									.getBytes());
+							myPoc.notifyObserver("update dashboard");
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -74,6 +75,7 @@ public class Task {
 						try {
 							out.write(String.format("ip: %s  port:%s poc:%s not vulnrable\n", information.get("ip"),
 									information.get("port"), myPoc.getLocation()).getBytes());
+							myPoc.notifyObserver("update detail");
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -98,6 +100,7 @@ public class Task {
 								.format("successful!!!  ip: %s  port:%s poc:%s extra:%s\n", IPocBase.Utils.getParameter(information, "ip"),
 										IPocBase.Utils.getParameter(information, "port"), myPoc.getLocation(), information.get("extra"))
 								.getBytes());
+						myPoc.notifyObserver("update dashboard");
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -106,6 +109,7 @@ public class Task {
 					try {
 						out.write(String.format("ip: %s  port:%s poc:%s not vulnrable\n", IPocBase.Utils.getParameter(information, "ip"),
 								IPocBase.Utils.getParameter(information, "port"), myPoc.getLocation()).getBytes());
+						myPoc.notifyObserver("update detail");
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
