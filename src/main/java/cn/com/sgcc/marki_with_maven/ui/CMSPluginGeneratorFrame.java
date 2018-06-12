@@ -1,14 +1,22 @@
 package cn.com.sgcc.marki_with_maven.ui;
 
 import java.awt.BorderLayout;
-import java.awt.Button;
 import java.awt.Component;
+import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
@@ -16,6 +24,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -23,11 +32,15 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-public class CMSPluginGenerator extends JFrame {
+import com.alibaba.fastjson.JSON;
+
+import cn.com.sgcc.marki_with_maven.bean.PluginJsonBean;
+
+public class CMSPluginGeneratorFrame extends JFrame {
 
 	JFrame parent = null;
 
-	public CMSPluginGenerator(JFrame parent) throws HeadlessException {
+	public CMSPluginGeneratorFrame(JFrame parent) throws HeadlessException {
 		super();
 		this.parent = parent;
 		init();
@@ -49,8 +62,8 @@ public class CMSPluginGenerator extends JFrame {
 			jPanel2.add(new JTextField());
 
 			requestHeaderEdit.add(jPanel2);
-			CMSPluginGenerator.this.revalidate();
-			CMSPluginGenerator.this.repaint();
+			CMSPluginGeneratorFrame.this.revalidate();
+			CMSPluginGeneratorFrame.this.repaint();
 		}
 
 	}
@@ -68,10 +81,8 @@ public class CMSPluginGenerator extends JFrame {
 	BooleanExpress booleanExpress1;
 
 	List<RelationBooleanExpress> relations = new ArrayList<>();
-	
+
 	JTextArea jTextArea;
-	
-	
 
 	class RelationBooleanExpress {
 		Relation relation1;
@@ -120,11 +131,26 @@ public class CMSPluginGenerator extends JFrame {
 		}
 
 	}
-	final String[] httpMethods = new String[] { "GET", "POST", "HEAD", "TRACE", "CONNECT", "PUT", "OPTIONS" };
-	JPanel requestHeaderEdit = null;
 
+	final String[] httpMethods = new String[] { "GET", "POST", "HEAD", "TRACE", "CONNECT", "PUT", "OPTIONS" };
+	final String[] respCodeRelation = new String[] { "==", ">=", "<=", ">", "<" };
+	JPanel requestHeaderEdit = null;
+	JTextField pocName;
+	JTextArea pocFix ;
 	private void init() {
 		this.setLayout(new BorderLayout());
+		
+		
+		JPanel basicInfo = new JPanel(new GridLayout(2, 2));
+		pocName = new JTextField();
+		pocFix = new JTextArea(2, 10);
+		basicInfo.add(new JLabel("name"));
+		basicInfo.add(new JLabel("Fix"));
+		basicInfo.add(pocName);
+		basicInfo.add(new JScrollPane(pocFix));
+		
+		this.add(basicInfo, BorderLayout.NORTH);
+		
 
 		JPanel requestPanel = new JPanel();
 		requestPanel.setLayout(new BoxLayout(requestPanel, BoxLayout.Y_AXIS));
@@ -161,7 +187,7 @@ public class CMSPluginGenerator extends JFrame {
 		requestBody = new JTextArea(10, 10);
 		requestPanel.add(new JScrollPane(requestBody));
 
-		this.add(new JScrollPane(requestPanel), BorderLayout.NORTH);
+		this.add(new JScrollPane(requestPanel), BorderLayout.CENTER);
 
 		// response judge
 
@@ -172,7 +198,7 @@ public class CMSPluginGenerator extends JFrame {
 		JPanel respCodePanel = new JPanel();
 		respCodePanel.setLayout(new BoxLayout(respCodePanel, BoxLayout.X_AXIS));
 		respCodePanel.add(new JLabel("resp code"));
-		respCodeComboBox = new JComboBox<String>(new String[] { "==", ">=", "<=", ">", "<" });
+		respCodeComboBox = new JComboBox<String>(respCodeRelation);
 		respCodePanel.add(respCodeComboBox);
 		respCodeTextField = new JTextField();
 		respCodePanel.add(respCodeTextField);
@@ -225,12 +251,12 @@ public class CMSPluginGenerator extends JFrame {
 
 		jPanel.add(new JLabel("resp body"));
 		jPanel.add(new JLabel("contains"));
-		jTextArea =  new JTextArea(10, 10);
+		jTextArea = new JTextArea(10, 10);
 		jPanel.add(new JScrollPane(jTextArea));
 		respPanel.add(jPanel);
-		
-		
+
 		JButton buttonGenerate = new JButton("generate");
+		buttonGenerate.addActionListener(new GeneratePocAction());
 		respPanel.add(buttonGenerate);
 
 		this.add(new JScrollPane(respPanel), BorderLayout.SOUTH);
@@ -239,26 +265,78 @@ public class CMSPluginGenerator extends JFrame {
 		this.setVisible(true);
 
 	}
-	
-	class GeneratePocAction implements ActionListener
-	{
+
+
+	class GeneratePocAction implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
-			String httpMethod = httpMethods[methodComboBox.getSelectedIndex()];
-			String uri = uriTextField.getText();
-			HashMap<String, String> myRequestHeaders = new HashMap<>(); 
-			for(Component comp :requestHeaders.keySet())
-			{
-				myRequestHeaders.put( (( JTextField)comp).getText()  ,(( JTextField) requestHeaders.get(comp) ).getText()  );
-			}
-			String myRequestBody = requestBody.getText();
+			PluginJsonBean pluginJsonBean = new PluginJsonBean();
+			pluginJsonBean.pocName = pocName.getText();
+			pluginJsonBean.pocFix = pocFix.getText();
 			
+			pluginJsonBean. httpMethod = httpMethods[methodComboBox.getSelectedIndex()];
+//			System.out.println(pluginJsonBean. httpMethod);
+			pluginJsonBean. uri = uriTextField.getText();
+//			System.out.println(pluginJsonBean. uri);
+			pluginJsonBean. myRequestHeaders = new HashMap<>();
+			for (Component comp : requestHeaders.keySet()) {
+				pluginJsonBean.myRequestHeaders.put(((JTextField) comp).getText(), ((JTextField) requestHeaders.get(comp)).getText());
+			}
+			pluginJsonBean. myRequestBody = requestBody.getText();
+
+			pluginJsonBean. respCompareRelation = respCodeRelation[respCodeComboBox.getSelectedIndex()];
+			pluginJsonBean. respCompareCode = respCodeTextField.getText();
+
+			pluginJsonBean. respHeaderContain = respHeaderContains.getText();
+
+			pluginJsonBean. relation = relation1.getRelation();
+			pluginJsonBean. respHeader1 = booleanExpress1.jTextField.getText();
+			pluginJsonBean. respHeader1ContainsContent = booleanExpress1.jTextField2.getText();
+
+			pluginJsonBean. list = new ArrayList<>();
+			for (RelationBooleanExpress rbe : relations) {
+				pluginJsonBean.list.add(new StringRelationBooleanExpress(rbe.relation1.getRelation(),
+						rbe.booleanExpress1.jTextField.getText(), rbe.booleanExpress1.jTextField2.getText()));
+			}
+
+			pluginJsonBean. respContent = jTextArea.getText();
+			
+			try {
+				FileWriter fileWriter = new FileWriter(new File("plugin_Json/"+UUID.randomUUID().toString()));
+				
+				fileWriter.write(JSON.toJSONString(pluginJsonBean));;
+				fileWriter.flush();
+				fileWriter.close();
+				JOptionPane.showMessageDialog(null, "add CMS Plugin Successful");
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+//			System.out.println();
+//			System.out.println();
 		}
-		
+
 	}
-	
+
+	public class StringRelationBooleanExpress {
+		String relation;
+		String respHeader1;
+		String respHeader1ContainsContent;
+
+		public StringRelationBooleanExpress(String relation, String respHeader1, String respHeader1ContainsContent) {
+			super();
+			this.relation = relation;
+			this.respHeader1 = respHeader1;
+			this.respHeader1ContainsContent = respHeader1ContainsContent;
+		}
+
+	}
 
 	class AddRespHeaderValueAction implements ActionListener {
 
@@ -290,30 +368,27 @@ public class CMSPluginGenerator extends JFrame {
 			jPanel.add(jLabel);
 			JTextField jTextField2 = new JTextField();
 			jPanel.add(jTextField2);
-			
+
 			JButton buttonRemove = new JButton("remove");
 			jPanel.add(buttonRemove);
-			
 
 			RelationBooleanExpress relationBooleanExpress = new RelationBooleanExpress(
 					new Relation(jRadioButton, jRadioButton2), new BooleanExpress(jTextField, jLabel, jTextField2));
 			buttonRemove.addActionListener(new RelationRemoveAction(relationBooleanExpress, relationPanel, jPanel));
 			relations.add(relationBooleanExpress);
 			respHeaderValuePanelFreeAdd.add(jPanel);
-			CMSPluginGenerator.this.revalidate();
-			CMSPluginGenerator.this.repaint();
+			CMSPluginGeneratorFrame.this.revalidate();
+			CMSPluginGeneratorFrame.this.repaint();
 			// CMSPluginGenerator.this.pack();
 		}
 
 	}
-	
-	class RelationRemoveAction implements ActionListener
-	{
-		RelationBooleanExpress  relationBooleanExpress = null; 
+
+	class RelationRemoveAction implements ActionListener {
+		RelationBooleanExpress relationBooleanExpress = null;
 		JPanel panel = null;
 		JPanel panel1 = null;
-		
-		
+
 		public RelationRemoveAction(RelationBooleanExpress relationBooleanExpress, JPanel panel, JPanel panel1) {
 			super();
 			this.relationBooleanExpress = relationBooleanExpress;
@@ -321,19 +396,18 @@ public class CMSPluginGenerator extends JFrame {
 			this.panel1 = panel1;
 		}
 
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
 			relations.remove(relationBooleanExpress);
 			respHeaderValuePanelFreeAdd.remove(panel);
 			respHeaderValuePanelFreeAdd.remove(panel1);
-			CMSPluginGenerator.this.revalidate();
+			CMSPluginGeneratorFrame.this.revalidate();
 		}
-		
+
 	}
 
 	public static void main(String[] args) {
-		new CMSPluginGenerator(null);
+		new CMSPluginGeneratorFrame(null);
 	}
 }

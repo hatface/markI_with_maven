@@ -33,8 +33,7 @@ public class FinialshopPhpinfo implements IPocBase {
 		String port = (String) infodict.get("port");
 		String serviceType = (String) infodict.get("service_type");
 		String serviceVersion = (String) infodict.get("service_version");
-		if ( serviceType.toLowerCase().contains("http"))
-		{
+		if (serviceType.toLowerCase().contains("http")) {
 			ismatch = true;
 		}
 		return ismatch;
@@ -50,22 +49,19 @@ public class FinialshopPhpinfo implements IPocBase {
 		boolean success = false;
 		CloseableHttpClient customClient = null;
 		try {
-			String[] uris = new String[]{"data/dkcm_ssdfhwejkfs.mdb", "_data/___dkcms_30_free.mdb"};
+			String[] uris = new String[] { "data/dkcm_ssdfhwejkfs.mdb", "_data/___dkcms_30_free.mdb" };
 			boolean isBreak = false;
-			for (String uri : uris)
-			{
-				if(isBreak)
+			for (String uri : uris) {
+				if (isBreak)
 					break;
-				String url = String.format("%s://%s:%s/"+uri, serviceType.contains("https") ? "https":"http", ip, port );
+				String url = String.format("%s://%s:%s/" + uri, serviceType.contains("https") ? "https" : "http", ip,
+						port);
 				HttpGet httpGet = new HttpGet(url);
 				customClient = new NetWorkTools().getCustomClient();
 				CloseableHttpResponse resp = customClient.execute(httpGet);
-				if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
-				{
-					for (Header head : resp.getAllHeaders())
-					{
-						if(head.getValue().contains("application/x-msaccess"))
-						{
+				if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+					for (Header head : resp.getAllHeaders()) {
+						if (head.getValue().contains("application/x-msaccess")) {
 							success = true;
 							isBreak = true;
 							break;
@@ -74,7 +70,7 @@ public class FinialshopPhpinfo implements IPocBase {
 				}
 				httpGet.releaseConnection();
 			}
-			
+
 		} catch (KeyManagementException | NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -84,11 +80,9 @@ public class FinialshopPhpinfo implements IPocBase {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		finally
-		{
+		} finally {
 			try {
-				if(customClient != null)
+				if (customClient != null)
 					customClient.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -99,7 +93,7 @@ public class FinialshopPhpinfo implements IPocBase {
 	}
 
 	public static void main(String[] args) {
-		
+
 	}
 
 }

@@ -1,6 +1,10 @@
 package cn.com.sgcc.marki_with_maven.db;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -241,5 +245,56 @@ public class ClassLoader {
 		
 		return result;
 	}
+	
+	private void loadJsonPlugin()
+	{
+		traverseFolder1("plugin_Json") ;
+	}
+	
+	
+	@SuppressWarnings("resource")
+	private void loadJsonPluginSep(File file)
+	{
+		try {
+			FileReader fileReader = new FileReader(file);
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			String line = null;
+			while( ( line = bufferedReader.readLine() ) != null )
+			{
+				
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private  void traverseFolder1(String path) {
+
+        File file = new File(path);
+        if (file.exists()) {
+            File[] files = file.listFiles();
+            if (files.length == 0) {
+//                System.out.println("文件夹是空的!");
+                return;
+            } else {
+                for (File file2 : files) {
+                    if (file2.isDirectory()) {
+//                        System.out.println("文件夹:" + file2.getAbsolutePath());
+                        traverseFolder2(file2.getAbsolutePath());
+                    } else {
+                    	loadJsonPluginSep(file2);
+//                        System.out.println("文件:" + file2.getAbsolutePath());
+                    }
+                }
+            }
+        } else {
+//            System.out.println("文件不存在!");
+        }
+    }
+	
 
 }
