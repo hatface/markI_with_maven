@@ -174,6 +174,7 @@ public class MainFrame extends JFrame implements Observer {
 			try {
 				DBHelper.getInstance().getPocDao().update(poc);
 				JOptionPane.showMessageDialog(MainFrame.this, "add successful");
+				MainFrame.this.showPocDetail(poc);
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
