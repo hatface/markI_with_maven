@@ -304,7 +304,7 @@ public class CMSPluginGeneratorFrame extends JFrame {
 			pluginJsonBean. respContent = jTextArea.getText();
 			
 			try {
-				FileWriter fileWriter = new FileWriter(new File("plugin_Json/"+UUID.randomUUID().toString()));
+				FileWriter fileWriter = new FileWriter(new File("plugin_Json/"+UUID.randomUUID().toString()+".json"));
 				
 				fileWriter.write(JSON.toJSONString(pluginJsonBean));;
 				fileWriter.flush();
@@ -325,9 +325,9 @@ public class CMSPluginGeneratorFrame extends JFrame {
 	}
 
 	public class StringRelationBooleanExpress {
-		String relation;
-		String respHeader1;
-		String respHeader1ContainsContent;
+		public String relation;
+		public String respHeader1;
+		public String respHeader1ContainsContent;
 
 		public StringRelationBooleanExpress(String relation, String respHeader1, String respHeader1ContainsContent) {
 			super();
