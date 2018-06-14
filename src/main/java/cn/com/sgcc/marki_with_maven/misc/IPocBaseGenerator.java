@@ -56,14 +56,19 @@ public class IPocBaseGenerator {
 			@Override
 			public Map info() {
 				// TODO Auto-generated method stub
-				return null;
+				Map info = new HashMap<String, String>();
+				
+				return info;
 			}
 
 			@Override
 			public boolean match(Map infodict) {
 				// TODO Auto-generated method stub
-
-				return false;
+				String ip = (String) IPocBase.Utils.getParameter(infodict, "ip");
+				String port = (String) IPocBase.Utils.getParameter(infodict, "port");
+				String serviceType = (String) IPocBase.Utils.getParameter(infodict, "service_type");
+				String serviceVersion = (String) IPocBase.Utils.getParameter(infodict, "service_version");
+				return serviceType.contains("http");
 			}
 
 			@Override
@@ -169,9 +174,9 @@ public class IPocBaseGenerator {
 
 					String string = EntityUtils.toString(resp.getEntity());
 
-					if (!EntityUtils.toString(resp.getEntity()).equals("")
+					if (!string.equals("")
 							&& !IPocBaseGenerator.this.plugin.respContent.equals("")) {
-						resultBooleanExpress += " && " + EntityUtils.toString(resp.getEntity())
+						resultBooleanExpress += " && " + string
 								.contains(IPocBaseGenerator.this.plugin.respContent);
 					}
 					ScriptEngineManager manager = new ScriptEngineManager();   

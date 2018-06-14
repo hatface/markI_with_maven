@@ -63,18 +63,23 @@ public class Task {
 					if (myPoc.action.verify(information) == true) {
 						try {
 							Config.getSINGLETON().getConsoleOS().write(String
-									.format("successful!!!  ip: %s  port:%s poc:%s extra:%s\n", information.get("ip"),
-											information.get("port"), myPoc.getLocation(), information.get("extra"))
+									.format("successful!!!  ip: %s  port:%s poc:%s extra:%s\n", (String) IPocBase.Utils.getParameter(information, "ip"),
+											(String) IPocBase.Utils.getParameter(information, "port"),myPoc.getName().length() > 0? myPoc.getName():  myPoc.getLocation(), information.get("extra"))
+									.getBytes());
+							out.write(String
+									.format("successful!!!  ip: %s  port:%s poc:%s extra:%s\n", (String) IPocBase.Utils.getParameter(information, "ip"),
+											(String) IPocBase.Utils.getParameter(information, "port"),myPoc.getName().length() > 0? myPoc.getName():  myPoc.getLocation(), information.get("extra"))
 									.getBytes());
 							myPoc.notifyObserver("update dashboard");
+							myPoc.notifyObserver("update detail");
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					} else {
 						try {
-							out.write(String.format("ip: %s  port:%s poc:%s not vulnrable\n", information.get("ip"),
-									information.get("port"), myPoc.getLocation()).getBytes());
+							out.write(String.format("ip: %s  port:%s poc:%s not vulnrable\n", (String) IPocBase.Utils.getParameter(information, "ip"),
+									(String) IPocBase.Utils.getParameter(information, "port"),myPoc.getName().length() > 0? myPoc.getName():  myPoc.getLocation()).getBytes());
 							myPoc.notifyObserver("update detail");
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
@@ -97,10 +102,15 @@ public class Task {
 				if (myPoc.action.verify(information) == true) {
 					try {
 						Config.getSINGLETON().getConsoleOS().write(String
-								.format("successful!!!  ip: %s  port:%s poc:%s extra:%s\n", IPocBase.Utils.getParameter(information, "ip"),
-										IPocBase.Utils.getParameter(information, "port"), myPoc.getLocation(), information.get("extra"))
+								.format("successful!!!  ip: %s  port:%s poc:%s extra:%s\n", (String) IPocBase.Utils.getParameter(information, "ip"),
+										(String) IPocBase.Utils.getParameter(information, "port"),myPoc.getName().length() > 0? myPoc.getName():  myPoc.getLocation(), information.get("extra"))
+								.getBytes());
+						out.write(String
+								.format("successful!!!  ip: %s  port:%s poc:%s extra:%s\n", (String) IPocBase.Utils.getParameter(information, "ip"),
+										(String) IPocBase.Utils.getParameter(information, "port"),myPoc.getName().length() > 0? myPoc.getName():  myPoc.getLocation(), information.get("extra"))
 								.getBytes());
 						myPoc.notifyObserver("update dashboard");
+						myPoc.notifyObserver("update detail");
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -108,7 +118,7 @@ public class Task {
 				} else {
 					try {
 						out.write(String.format("ip: %s  port:%s poc:%s not vulnrable\n", IPocBase.Utils.getParameter(information, "ip"),
-								IPocBase.Utils.getParameter(information, "port"), myPoc.getLocation()).getBytes());
+								IPocBase.Utils.getParameter(information, "port"), myPoc.getName().length() > 0? myPoc.getName(): myPoc.getLocation()).getBytes());
 						myPoc.notifyObserver("update detail");
 					} catch (IOException e) {
 						// TODO Auto-generated catch block

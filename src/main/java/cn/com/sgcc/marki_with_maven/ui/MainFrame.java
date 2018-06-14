@@ -51,7 +51,7 @@ public class MainFrame extends JFrame implements Observer {
 
 	public JTextArea rightDownPanePanelTextArea = null;
 	public JTextArea areaServiceResult = null;
-	public JTextField textTarget = null;
+	public JTextArea textTarget = null;
 
 	public void init() {
 		setSize(800, 600);
@@ -73,16 +73,42 @@ public class MainFrame extends JFrame implements Observer {
 		menu1.add(item2);
 		
 		JMenuItem pluginCmsAdd = new JMenuItem("cms plugin add");
-
+		pluginCmsAdd.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				new CMSPluginGeneratorFrame(MainFrame.this);
+			}
+		});
+		menu3.add(pluginCmsAdd);
 		// JSplitPane
 		wholePanel = new JSplitPane();
 		leftPanel = new TreeViewPanel(this);
-
+		
+		
 		showDashBoard();
-
+		
+		
 		setJMenuBar(menubar);
 		setContentPane(wholePanel);
 		setVisible(true);
+		wholePanel.setOneTouchExpandable(true);
+		wholePanel.setContinuousLayout(true);
+		wholePanel.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
+		wholePanel.setDividerLocation(0.25);
+		wholePanel.setDividerSize(3);
+
+		rightPanel.setOneTouchExpandable(true);
+		rightPanel.setContinuousLayout(true);
+		rightPanel.setOrientation(JSplitPane.VERTICAL_SPLIT);
+//		rightPanel.setRightComponent();
+//		rightPanel.setLeftComponent();
+		rightPanel.setDividerLocation(0.90);
+		rightPanel.setDividerSize(3);
+//		this.set
+//		this.pack();
+		
 
 	}
 
@@ -112,23 +138,24 @@ public class MainFrame extends JFrame implements Observer {
 		JPanel rightUpPane = new JPanel(new BorderLayout());
 		JPanel operationPanel = new JPanel();
 		JLabel lableTarget = new JLabel("target");
-		textTarget = new JTextField("                                 ");
+		textTarget = new JTextArea(5, 40);
 		textTarget.setToolTipText("input target as 10.0.0.1/24");
 		JButton buttonStart = new JButton("start");
 		buttonStart.addActionListener(new buttonStartActionListener());
-		areaServiceResult = new JTextArea();
+		areaServiceResult = new JTextArea(20, 10);
 		areaServiceResult.setEditable(false);
 		JTabbedPane wrapAreaServiceResult = new JTabbedPane();
 		wrapAreaServiceResult.add("service", new JScrollPane(areaServiceResult));
 		areaServiceResult.setText(Config.getSINGLETON().getServiceOS().toString());
 		operationPanel.add(lableTarget);
-		operationPanel.add(textTarget);
+		operationPanel.add(new JScrollPane(textTarget));
 		operationPanel.add(buttonStart);
 		rightUpPane.add(operationPanel, BorderLayout.NORTH);
 		rightUpPane.add(wrapAreaServiceResult, BorderLayout.CENTER);
 
 		rightDownPanePanelTextArea.setText(Config.getSINGLETON().getConsoleOS().toString());
-
+		
+		
 		wholePanel.setOneTouchExpandable(true);
 		wholePanel.setContinuousLayout(true);
 		wholePanel.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
@@ -140,11 +167,17 @@ public class MainFrame extends JFrame implements Observer {
 		rightPanel.setOneTouchExpandable(true);
 		rightPanel.setContinuousLayout(true);
 		rightPanel.setOrientation(JSplitPane.VERTICAL_SPLIT);
-		rightPanel.setRightComponent(rightDownPane);
-		rightPanel.setLeftComponent(rightUpPane);
-		rightPanel.setDividerLocation(0.70);
+		rightPanel.setTopComponent(rightUpPane);
+//		rightPanel.setRightComponent();
+//		rightPanel.setLeftComponent();
+		rightPanel.setBottomComponent(rightDownPane);
+		rightPanel.setDividerLocation(0.90);
 		rightPanel.setDividerSize(3);
+		this.validate();
 		this.repaint();
+//		this.pack();
+		
+		
 	}
 
 	JTextField idTextField = new JTextField();
@@ -277,6 +310,14 @@ public class MainFrame extends JFrame implements Observer {
 		rightUpPanecontent.add(tmp3Panel, BorderLayout.EAST);
 		rightUpPane.add("detail", rightUpPanecontent);
 
+		wholePanel.setOneTouchExpandable(true);
+		wholePanel.setContinuousLayout(true);
+		wholePanel.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
+		wholePanel.setRightComponent(rightPanel);
+		wholePanel.setLeftComponent(leftPanel);
+		wholePanel.setDividerLocation(0.25);
+		wholePanel.setDividerSize(3);
+		
 		rightPanel.setOneTouchExpandable(true);
 		rightPanel.setContinuousLayout(true);
 		rightPanel.setOrientation(JSplitPane.VERTICAL_SPLIT);

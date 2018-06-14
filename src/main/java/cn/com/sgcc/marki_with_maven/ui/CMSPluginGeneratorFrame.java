@@ -325,6 +325,8 @@ public class CMSPluginGeneratorFrame extends JFrame {
 	}
 
 	public class StringRelationBooleanExpress {
+		public StringRelationBooleanExpress(){}
+		
 		public String relation;
 		public String respHeader1;
 		public String respHeader1ContainsContent;
