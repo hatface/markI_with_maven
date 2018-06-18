@@ -13,6 +13,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +36,7 @@ import javax.swing.border.TitledBorder;
 import com.alibaba.fastjson.JSON;
 
 import cn.com.sgcc.marki_with_maven.bean.PluginJsonBean;
+import cn.com.sgcc.marki_with_maven.db.ClassLoader;
 
 public class CMSPluginGeneratorFrame extends JFrame {
 
@@ -304,16 +306,24 @@ public class CMSPluginGeneratorFrame extends JFrame {
 			pluginJsonBean. respContent = jTextArea.getText();
 			
 			try {
-				FileWriter fileWriter = new FileWriter(new File("plugin_Json/"+UUID.randomUUID().toString()));
+				FileWriter fileWriter = new FileWriter(new File("plugin_Json/"+UUID.randomUUID().toString()+".json"));
 				
 				fileWriter.write(JSON.toJSONString(pluginJsonBean));;
 				fileWriter.flush();
 				fileWriter.close();
+				ClassLoader.getSINGLETON().loadClasses();
+//				parent
 				JOptionPane.showMessageDialog(null, "add CMS Plugin Successful");
 			} catch (FileNotFoundException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (ClassNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
@@ -325,9 +335,11 @@ public class CMSPluginGeneratorFrame extends JFrame {
 	}
 
 	public class StringRelationBooleanExpress {
-		String relation;
-		String respHeader1;
-		String respHeader1ContainsContent;
+		public StringRelationBooleanExpress(){}
+		
+		public String relation;
+		public String respHeader1;
+		public String respHeader1ContainsContent;
 
 		public StringRelationBooleanExpress(String relation, String respHeader1, String respHeader1ContainsContent) {
 			super();

@@ -1,8 +1,6 @@
 package cn.com.sgcc.marki_with_maven.ui;
 
-import java.awt.Component;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -13,12 +11,6 @@ import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
-
-import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.dao.DaoManager;
-import com.j256.ormlite.jdbc.JdbcConnectionSource;
-import com.j256.ormlite.support.ConnectionSource;
-import com.mysql.cj.x.protobuf.MysqlxDatatypes.Array;
 
 import cn.com.sgcc.marki_with_maven.bean.Poc;
 import cn.com.sgcc.marki_with_maven.db.ClassLoader;
@@ -156,6 +148,11 @@ public class TreeViewPanel extends JPanel {
 				}
 			}
 		});
+	}
+	
+	public void update()
+	{
+		
 	}
 
 	

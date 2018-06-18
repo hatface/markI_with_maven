@@ -1,7 +1,6 @@
 package cn.com.sgcc.marki_with_maven.db;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -15,35 +14,35 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
+import cn.com.sgcc.marki_with_maven.bean.PluginJsonBean;
 import cn.com.sgcc.marki_with_maven.bean.Poc;
+import cn.com.sgcc.marki_with_maven.misc.IPocBaseGenerator;
 import cn.com.sgcc.marki_with_maven.misc.Strings;
 import cn.com.sgcc.marki_with_maven.modules.IPocBase;
 
 public class ClassLoader {
-	
-	private static  ClassLoader SINGLETON = null;
-	
-	private ClassLoader()
-	{
-		
+
+	private static ClassLoader SINGLETON = null;
+
+	private ClassLoader() {
+
 	}
-	
-	public static synchronized ClassLoader getSINGLETON()
-	{
+
+	public static synchronized ClassLoader getSINGLETON() {
 		ClassLoader retValue = null;
-		if(SINGLETON == null)
-		{
-			SINGLETON = new ClassLoader(); 
+		if (SINGLETON == null) {
+			SINGLETON = new ClassLoader();
 			retValue = SINGLETON;
-		}
-		else{
-			retValue =  SINGLETON;
+		} else {
+			retValue = SINGLETON;
 		}
 		return retValue;
 	}
@@ -66,21 +65,18 @@ public class ClassLoader {
 			String connectionString = "jdbc:sqlite:db/data.db";
 			connectionSource = new JdbcConnectionSource(connectionString);
 			pocDao = DaoManager.createDao(connectionSource, Poc.class);
-			try{
-			TableUtils.createTable(connectionSource, Poc.class);
-			}
-			catch(Exception e)
-			{
+			try {
+				TableUtils.createTable(connectionSource, Poc.class);
+			} catch (Exception e) {
 				;
 			}
 			List<Poc> queryForAll = pocDao.queryForAll();
-			for(Poc poc : queryForAll)
-			{
+			for (Poc poc : queryForAll) {
 				pocs.put(poc.getLocation(), poc);
 			}
 		} finally {
 			// destroy the data source which should close underlying connections
-			
+
 		}
 
 		// 取指定目录
@@ -88,30 +84,30 @@ public class ClassLoader {
 
 		// 取指定包
 		HashMap<String, Poc> loadFromPackage = loadFromPackage();
-		
+
+		loadJsonPlugin();
+
 		// 保持数据库与目录和包一致
-		if(loadFromPackage.keySet().size() != 0)
-		{
+		if (loadFromPackage.keySet().size() != 0) {
 			pocDao.create(loadFromPackage.values());
 		}
-		if(tmp.keySet().size() != 0)
-		{
+		if (tmp.keySet().size() != 0) {
 			pocDao.create(tmp.values());
 		}
-		
-		
-		for(String key : pocs.keySet())
-		{
-			if(key.endsWith(".jar"))
-			{
-				
+		if (tmp1.keySet().size() != 0) {
+			pocDao.create(tmp.values());
+		}
+
+		for (String key : pocs.keySet()) {
+			if (key.endsWith(".jar")) {
+
 				try {
-					URL url1 = new URL("file:"+key);
-					URLClassLoader myClassLoader1 = new URLClassLoader(new URL[] { url1 }, Thread.currentThread()  
-			                .getContextClassLoader());  
-			        Class<?> myClass1;
+					URL url1 = new URL("file:" + key);
+					URLClassLoader myClassLoader1 = new URLClassLoader(new URL[] { url1 },
+							Thread.currentThread().getContextClassLoader());
+					Class<?> myClass1;
 					myClass1 = myClassLoader1.loadClass("com.sgcc.module.Poc");
-					IPocBase object  = ((IPocBase)myClass1.newInstance());
+					IPocBase object = ((IPocBase) myClass1.newInstance());
 					pocs.get(key).action = object;
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
@@ -122,11 +118,20 @@ public class ClassLoader {
 				} catch (IllegalAccessException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}  
-		        
-			}
-			else
-			{
+				}
+
+			} else if (key.endsWith(".json")) {
+				FileReader fileReader = new FileReader(key);
+				BufferedReader bufferedReader = new BufferedReader(fileReader);
+				String line = null;
+				while ((line = bufferedReader.readLine()) != null) {
+					PluginJsonBean parseObject = JSON.parseObject(line, new TypeReference<PluginJsonBean>() {
+					});
+					IPocBase generateIPocBase = IPocBaseGenerator.getINSTANCE().generateIPocBase(parseObject);
+					pocs.get(key).action = generateIPocBase;
+				}
+				bufferedReader.close();
+			} else {
 				Class<?> forName = Class.forName(key);
 				try {
 					pocs.get(key).action = (IPocBase) forName.newInstance();
@@ -147,34 +152,30 @@ public class ClassLoader {
 
 	private HashMap<String, Poc> loadFromDirectory() {
 		traverseFolder2("plugin");
-		
+
 		return null;
 	}
-	
-	private HashMap<String, Poc> tmp = new HashMap<>();
 
-	private void loadClass(File file)
-	{
+	private HashMap<String, Poc> tmp = new HashMap<>();
+	private HashMap<String, Poc> tmp1 = new HashMap<>();
+
+	private void loadClass(File file) {
 		String path = file.getPath();
-		if(file.getAbsolutePath().endsWith(".jar"))
-		{
+		if (file.getAbsolutePath().endsWith(".jar")) {
 			URL url1;
 			try {
-				url1 = new URL("file:"+file.getAbsolutePath());
-				URLClassLoader myClassLoader1 = new URLClassLoader(new URL[] { url1 }, Thread.currentThread()  
-		                .getContextClassLoader());  
-		        Class<?> myClass1 = myClassLoader1.loadClass("com.sgcc.module.Poc");  
-		        IPocBase object  = ((IPocBase)myClass1.newInstance());
-		        Poc poc = new Poc((String)object.info().get("name"), 
-						(String)object.info().get("category"),
-						(String)object.info().get("location"), 
-						(String)object.info().get("author"), 
-						(String)object.info().get("fix"));
-		        if(pocs.get(poc.getLocation()) == null)
-		        {
-		        	tmp.put(poc.getLocation(), poc);
-		        	pocs.put(poc.getLocation(), poc);
-		        }
+				url1 = new URL("file:" + file.getAbsolutePath());
+				URLClassLoader myClassLoader1 = new URLClassLoader(new URL[] { url1 },
+						Thread.currentThread().getContextClassLoader());
+				Class<?> myClass1 = myClassLoader1.loadClass("com.sgcc.module.Poc");
+				IPocBase object = ((IPocBase) myClass1.newInstance());
+				Poc poc = new Poc((String) object.info().get("name"), (String) object.info().get("category"),
+						(String) object.info().get("location"), (String) object.info().get("author"),
+						(String) object.info().get("fix"));
+				if (pocs.get(poc.getLocation()) == null) {
+					tmp.put(poc.getLocation(), poc);
+					pocs.put(poc.getLocation(), poc);
+				}
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -187,81 +188,84 @@ public class ClassLoader {
 			} catch (IllegalAccessException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}  
-	        
+			}
+
 		}
 	}
-	
-	private  void traverseFolder2(String path) {
 
-        File file = new File(path);
-        if (file.exists()) {
-            File[] files = file.listFiles();
-            if (files.length == 0) {
-//                System.out.println("文件夹是空的!");
-                return;
-            } else {
-                for (File file2 : files) {
-                    if (file2.isDirectory()) {
-//                        System.out.println("文件夹:" + file2.getAbsolutePath());
-                        traverseFolder2(file2.getAbsolutePath());
-                    } else {
-                    	loadClass(file2);
-//                        System.out.println("文件:" + file2.getAbsolutePath());
-                    }
-                }
-            }
-        } else {
-//            System.out.println("文件不存在!");
-        }
-    }
-	
+	private void traverseFolder2(String path) {
+
+		File file = new File(path);
+		if (file.exists()) {
+			File[] files = file.listFiles();
+			if (files.length == 0) {
+				// System.out.println("文件夹是空的!");
+				return;
+			} else {
+				for (File file2 : files) {
+					if (file2.isDirectory()) {
+						// System.out.println("文件夹:" + file2.getAbsolutePath());
+						traverseFolder2(file2.getAbsolutePath());
+					} else {
+						loadClass(file2);
+						// System.out.println("文件:" + file2.getAbsolutePath());
+					}
+				}
+			}
+		} else {
+			// System.out.println("文件不存在!");
+		}
+	}
+
 	private HashMap<String, Poc> loadFromPackage() {
-		final List<Class<? extends IPocBase>> payloadClasses =
-				new ArrayList<Class<? extends IPocBase>>(IPocBase.Utils.getPayloadClasses());
+		final List<Class<? extends IPocBase>> payloadClasses = new ArrayList<Class<? extends IPocBase>>(
+				IPocBase.Utils.getPayloadClasses());
 		Collections.sort(payloadClasses, new Strings.ToStringComparator()); // alphabetize
-		
+
 		HashMap<String, Poc> result = new HashMap<>();
-		for(Class<? extends IPocBase> payloadClass : payloadClasses)
-		{
+		for (Class<? extends IPocBase> payloadClass : payloadClasses) {
 			try {
-				IPocBase object = ((IPocBase)payloadClass.newInstance());
-				Poc poc = new Poc((String)object.info().get("name"), 
-						(String)object.info().get("category"),
-						(String)object.info().get("location")==null ? payloadClass.getName(): (String)object.info().get("location"), 
-						(String)object.info().get("author"), 
-						(String)object.info().get("fix"));
-				if (this.pocs.get(poc.getLocation()) == null)
-				{
+				IPocBase object = ((IPocBase) payloadClass.newInstance());
+				Poc poc = new Poc((String) object.info().get("name"), (String) object.info().get("category"),
+						(String) object.info().get("location") == null ? payloadClass.getName()
+								: (String) object.info().get("location"),
+						(String) object.info().get("author"), (String) object.info().get("fix"));
+				if (this.pocs.get(poc.getLocation()) == null) {
 					result.put(poc.getLocation(), poc);
 					pocs.put(poc.getLocation(), poc);
 				}
-			}
-			catch(Throwable t)
-			{
-				
+			} catch (Throwable t) {
+
 			}
 		}
-		
+
 		return result;
 	}
-	
-	private void loadJsonPlugin()
-	{
-		traverseFolder1("plugin_Json") ;
+
+	private void loadJsonPlugin() {
+		traverseFolder1("plugin_Json");
 	}
-	
-	
+
 	@SuppressWarnings("resource")
-	private void loadJsonPluginSep(File file)
-	{
+	private void loadJsonPluginSep(File file) {
 		try {
 			FileReader fileReader = new FileReader(file);
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
 			String line = null;
-			while( ( line = bufferedReader.readLine() ) != null )
-			{
-				
+			while ((line = bufferedReader.readLine()) != null) {
+				Poc poc = new Poc();
+				PluginJsonBean parseObject = JSON.parseObject(line, new TypeReference<PluginJsonBean>() {
+				});
+				// IPocBase generateIPocBase =
+				// IPocBaseGenerator.getINSTANCE().generateIPocBase(parseObject);
+				// poc.setAction(generateIPocBase);
+				poc.setName(parseObject.pocName);
+				poc.setFix(parseObject.pocFix);
+				poc.setLocation("plugin_Json/" + file.getName());
+				if (this.getPocs().get(poc.getLocation()) == null) {
+					this.getPocs().put("plugin_Json/" + file.getName(), poc);
+					this.tmp1.put("plugin_Json/" + file.getName(), poc);
+				}
 			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -271,30 +275,29 @@ public class ClassLoader {
 			e.printStackTrace();
 		}
 	}
-	
-	private  void traverseFolder1(String path) {
 
-        File file = new File(path);
-        if (file.exists()) {
-            File[] files = file.listFiles();
-            if (files.length == 0) {
-//                System.out.println("文件夹是空的!");
-                return;
-            } else {
-                for (File file2 : files) {
-                    if (file2.isDirectory()) {
-//                        System.out.println("文件夹:" + file2.getAbsolutePath());
-                        traverseFolder2(file2.getAbsolutePath());
-                    } else {
-                    	loadJsonPluginSep(file2);
-//                        System.out.println("文件:" + file2.getAbsolutePath());
-                    }
-                }
-            }
-        } else {
-//            System.out.println("文件不存在!");
-        }
-    }
-	
+	private void traverseFolder1(String path) {
+
+		File file = new File(path);
+		if (file.exists()) {
+			File[] files = file.listFiles();
+			if (files.length == 0) {
+				// System.out.println("文件夹是空的!");
+				return;
+			} else {
+				for (File file2 : files) {
+					if (file2.isDirectory()) {
+						// System.out.println("文件夹:" + file2.getAbsolutePath());
+						traverseFolder2(file2.getAbsolutePath());
+					} else {
+						loadJsonPluginSep(file2);
+						// System.out.println("文件:" + file2.getAbsolutePath());
+					}
+				}
+			}
+		} else {
+			// System.out.println("文件不存在!");
+		}
+	}
 
 }
