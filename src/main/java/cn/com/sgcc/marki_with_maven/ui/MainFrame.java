@@ -51,6 +51,7 @@ public class MainFrame extends JFrame implements Observer {
 	public JTextArea rightDownPanePanelTextArea = null;
 	public JTextArea areaServiceResult = null;
 	public JTextArea textTarget = null;
+
 	private SplashFrame splash = null;
 
 	public void init() {
@@ -92,6 +93,7 @@ public class MainFrame extends JFrame implements Observer {
 		
 		setJMenuBar(menubar);
 		setContentPane(wholePanel);
+
 //		setVisible(true);
 //		wholePanel.setOneTouchExpandable(true);
 //		wholePanel.setContinuousLayout(true);
@@ -106,6 +108,7 @@ public class MainFrame extends JFrame implements Observer {
 ////		rightPanel.setLeftComponent();
 //		rightPanel.setDividerLocation(0.70);
 //		rightPanel.setDividerSize(3);
+
 //		this.set
 //		this.pack();
 		
@@ -172,6 +175,7 @@ public class MainFrame extends JFrame implements Observer {
 //		rightPanel.setLeftComponent();
 		rightPanel.setBottomComponent(rightDownPane);
 		rightPanel.setDividerLocation(0.50);
+
 		rightPanel.setDividerSize(3);
 		this.validate();
 		this.repaint();
