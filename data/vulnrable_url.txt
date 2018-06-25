@@ -14,3 +14,6 @@
 /maddash-webui/images/
 /maddash-webui/style/
 /catalog/?sect_id=-7753" OR 1455=1455#
+/Data/Log/18_06_20.log
+/GreenCMS-beta/Data/Log/18_06_20.log
+/index.php?target=db_sql.php%253f/../../../../../../../../var/lib/php/sessions/sess_11njnj4253qq93vjm9q93nvc7p2lq82k
