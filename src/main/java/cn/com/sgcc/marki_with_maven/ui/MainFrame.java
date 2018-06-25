@@ -346,11 +346,11 @@ public class MainFrame extends JFrame implements Observer {
 		{
 			poc.registerObserver( mainFrame);
 		}
-//		mainFrame.splash = new SplashFrame(mainFrame);
-//		mainFrame.splash.start();
+		mainFrame.splash = new SplashFrame(mainFrame);
+		mainFrame.splash.start();
 		
 		mainFrame.init();
-		mainFrame.setVisible(true);
+//		mainFrame.setVisible(true);
 //		mainFrame.showDashBoard();
 		
 //		mainFrame.setVisible(true);

